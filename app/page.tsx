@@ -1,7 +1,7 @@
 // src/app/page.tsx
 import { HeroSection } from "@/components/home/HeroSection";
 import { FeaturedGear } from "@/components/home/FeaturedGear";
-// import { HowItWorks } from "@/components/home/HowItWorks";
+import { HowItWorks } from "@/components/home/HowItWorks";
 
 export default async function HomePage() {
   // Fetch required homepage data if needed (e.g., featured rental products)
@@ -19,7 +19,7 @@ export default async function HomePage() {
 
       {/* Workflow / Features Section */}
       <section className="bg-muted/50 py-12">
-        {/* <HowItWorks /> */}
+        <HowItWorks />
       </section>
     </main>
   );
