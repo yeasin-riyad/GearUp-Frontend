@@ -1,8 +1,8 @@
+// app/layout.tsx
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import { Navbar } from "@/components/public/Navbar";
-import { Footer } from "@/components/public/Footer";
+import { Toaster } from "sonner";
 
 const geistSans = Geist({
   variable: "--font-sans",
@@ -35,24 +35,14 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  // ডেমো ইউজার অবজেক্ট (পরবর্তীতে আসল Auth Provider / Session থেকে আসবে)
-  // টেস্ট করার জন্য role চেঞ্জ করতে পারেন: "CUSTOMER" | "PROVIDER" | "ADMIN" | null
-  const mockUser = null; 
-
   return (
     <html
       lang="en"
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased scroll-smooth`}
     >
       <body className="flex min-h-full flex-col bg-background text-foreground">
-        {/* Global Navigation Header */}
-        <Navbar currentUser={mockUser} />
-
-        {/* Main Content Area */}
-        <main className="flex-1">{children}</main>
-
-        {/* Global Footer */}
-        <Footer />
+        <Toaster position="top-right" richColors />
+        {children}
       </body>
     </html>
   );

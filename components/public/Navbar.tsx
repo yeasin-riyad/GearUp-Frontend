@@ -91,12 +91,12 @@ export function Navbar({ currentUser = null }: NavbarProps) {
           ) : (
             /* Public Guest State */
             <div className="flex items-center gap-2">
-              <Link href="/auth/login">
+              <Link href="/login">
                 <Button variant="ghost" size="sm">
                   Log In
                 </Button>
               </Link>
-              <Link href="/auth/register">
+              <Link href="/register">
                 <Button size="sm" className="shadow-sm">
                   Get Started
                 </Button>
@@ -190,14 +190,14 @@ export function Navbar({ currentUser = null }: NavbarProps) {
                   ) : (
                     <div className="flex flex-col gap-2">
                       <Link
-                        href="/auth/register"
+                        href="/register"
                         onClick={() => setIsOpen(false)}
                         className="w-full"
                       >
                         <Button className="w-full">Register</Button>
                       </Link>
                       <Link
-                        href="/auth/login"
+                        href="/login"
                         onClick={() => setIsOpen(false)}
                         className="w-full"
                       >
