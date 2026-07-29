@@ -37,8 +37,8 @@ export async function registerUserAction(
 
   try {
     const baseUrl =
-      process.env.NEXT_PUBLIC_API_URL ||
-      "https://gearup-1-9p45.onrender.com/api";
+      process.env.BACKEND_API_URL ;
+   
     const response = await fetch(`${baseUrl}/auth/register`, {
       method: "POST",
       headers: {
@@ -87,8 +87,8 @@ export async function loginUserAction(
 
   try {
     const baseUrl =
-      process.env.NEXT_PUBLIC_API_URL ||
-      "https://gearup-1-9p45.onrender.com/api";
+      process.env.BACKEND_API_URL;
+   
     const response = await fetch(`${baseUrl}/auth/login`, {
       method: "POST",
       headers: {
@@ -111,6 +111,9 @@ export async function loginUserAction(
     // Extract token if sent in payload data or headers
     const accessToken = resData.data?.accessToken;
     const refreshToken = resData.data?.refreshToken;
+
+
+
 
     if (resData.success) {
       const cookieStore = await cookies();

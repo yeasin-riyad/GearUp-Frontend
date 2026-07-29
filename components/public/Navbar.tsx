@@ -1,4 +1,3 @@
-// src/components/public/Navbar.tsx
 "use client";
 
 import { useState } from "react";
@@ -17,6 +16,7 @@ import {
 import { UserMenu } from "./UserMenu";
 import { User } from "@/types/auth";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
+import { logout } from "@/service/logout";
 
 interface NavbarProps {
   currentUser?: User | null;
@@ -86,7 +86,7 @@ export function Navbar({ currentUser = null }: NavbarProps) {
                 </Link>
               )}
 
-              <UserMenu user={user} onLogout={() => alert("Logged out!")} />
+              <UserMenu user={user} onLogout={logout} />
             </div>
           ) : (
             /* Public Guest State */
@@ -155,15 +155,15 @@ export function Navbar({ currentUser = null }: NavbarProps) {
                     <div className="space-y-3">
                       <div className="flex items-center gap-3 px-2">
                         <Avatar className="h-10 w-10">
-                          <AvatarImage src={user.avatarUrl} />
-                          <AvatarFallback className="bg-primary/10 text-primary">
-                            {user.name[0]}
+                          <AvatarImage src={user.avatar} alt={user.name} />
+                          <AvatarFallback className="bg-primary/10 text-primary font-semibold">
+                            {user.name?.[0]?.toUpperCase() || "U"}
                           </AvatarFallback>
                         </Avatar>
                         <div>
                           <p className="text-sm font-semibold">{user.name}</p>
                           <p className="text-xs text-muted-foreground capitalize">
-                            {user.role.toLowerCase()}
+                            {user.role?.toLowerCase()}
                           </p>
                         </div>
                       </div>

@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { 
   User as UserIcon, 
   LayoutDashboard, 
@@ -25,6 +26,8 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Badge } from "@/components/ui/badge";
+import { logout } from "@/service/logout";
+import { toast } from "sonner";
 
 interface UserMenuProps {
   user: User;
@@ -32,6 +35,11 @@ interface UserMenuProps {
 }
 
 export function UserMenu({ user, onLogout }: UserMenuProps) {
+  const router = useRouter();
+
+  // Fallback avatar source (supports both avatar or avatarUrl)
+  const avatarSrc = (user as { avatarUrl?: string }).avatarUrl || user.avatar;
+
   // Get Initials for Avatar Fallback
   const initials = user.name
     ? user.name
@@ -55,9 +63,22 @@ export function UserMenu({ user, onLogout }: UserMenuProps) {
     }
   };
 
+  // Handle Logout Logic
+  const handleLogout = async () => {
+    try {
+      if (onLogout) {
+        onLogout();
+        toast.success("User Logged Out Successfully!");
+        router.push("/");
+      }
+      router.refresh();
+    } catch (error) {
+      console.error("Logout failed:", error);
+    }
+  };
+
   return (
     <DropdownMenu>
-      {/* render প্রপস ব্যবহার করায় অতিরিক্ত <button> ট্যাগ বা Hydration Issue তৈরি হবে না */}
       <DropdownMenuTrigger
         render={
           <Button
@@ -65,7 +86,7 @@ export function UserMenu({ user, onLogout }: UserMenuProps) {
             className="relative h-10 w-10 rounded-full ring-2 ring-primary/20 hover:ring-primary/50 transition-all focus-visible:outline-none"
           >
             <Avatar className="h-9 w-9">
-              <AvatarImage src={user.avatarUrl} alt={user.name} />
+              <AvatarImage src={avatarSrc} alt={user.name} />
               <AvatarFallback className="bg-primary/10 text-primary font-semibold text-xs">
                 {initials}
               </AvatarFallback>
@@ -75,21 +96,25 @@ export function UserMenu({ user, onLogout }: UserMenuProps) {
       />
 
       <DropdownMenuContent className="w-56" align="end">
-        {/* User Info Header */}
-        <DropdownMenuLabel className="font-normal">
-          <div className="flex flex-col space-y-1">
-            <div className="flex items-center justify-between">
-              <p className="text-sm font-semibold leading-none text-foreground">{user.name}</p>
-              <Badge 
-                variant={user.role === "ADMIN" ? "destructive" : user.role === "PROVIDER" ? "default" : "secondary"}
-                className="text-[10px] px-1.5 py-0 uppercase tracking-wider"
-              >
-                {user.role}
-              </Badge>
+        {/* Wrapped Header inside DropdownMenuGroup so Menu.GroupLabel context exists */}
+        <DropdownMenuGroup>
+          <DropdownMenuLabel className="font-normal">
+            <div className="flex flex-col space-y-1">
+              <div className="flex items-center justify-between">
+                <p className="text-sm font-semibold leading-none text-foreground truncate max-w-[120px]">
+                  {user.name}
+                </p>
+                <Badge 
+                  variant={user.role === "ADMIN" ? "destructive" : user.role === "PROVIDER" ? "default" : "secondary"}
+                  className="text-[10px] px-1.5 py-0 uppercase tracking-wider"
+                >
+                  {user.role}
+                </Badge>
+              </div>
+              <p className="text-xs leading-none text-muted-foreground truncate">{user.email}</p>
             </div>
-            <p className="text-xs leading-none text-muted-foreground">{user.email}</p>
-          </div>
-        </DropdownMenuLabel>
+          </DropdownMenuLabel>
+        </DropdownMenuGroup>
         
         <DropdownMenuSeparator />
 
@@ -183,7 +208,7 @@ export function UserMenu({ user, onLogout }: UserMenuProps) {
 
         {/* Logout */}
         <DropdownMenuItem 
-          onClick={onLogout} 
+          onClick={handleLogout} 
           className="cursor-pointer text-destructive focus:text-destructive focus:bg-destructive/10"
         >
           <LogOut className="mr-2 h-4 w-4" />

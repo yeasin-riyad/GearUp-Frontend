@@ -5,8 +5,9 @@ export interface User {
   id: string;
   name: string;
   email: string;
-  role: UserRole;
-  avatarUrl?: string;
+  role: "CUSTOMER" | "PROVIDER" | "ADMIN";
+  avatar?: string;
+  [key: string]: unknown;
 }
 
 export interface AuthState {

@@ -38,10 +38,9 @@ export function LoginForm() {
 
       if (result.success) {
         toast.success(result.message || "Logged in successfully!");
-        setTimeout(() => {
           router.push("/");
-          router.refresh();
-        }, 1000);
+          // router.refresh();
+      
       } else {
         toast.error(result.message || "Invalid email or password");
       }

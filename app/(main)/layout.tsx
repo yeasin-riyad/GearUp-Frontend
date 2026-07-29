@@ -1,20 +1,20 @@
 // app/(main)/layout.tsx
 import { Navbar } from "@/components/public/Navbar";
 import { Footer } from "@/components/public/Footer";
+import { getCurrentUser } from "@/service/auth.service";
 
-export default function MainLayout({
+export default async function MainLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  // Demo user object (will later come from Auth Provider / Session)
-  // Options: "CUSTOMER" | "PROVIDER" | "ADMIN" | null
-  const mockUser = null;
+  // Fetch the actual authenticated user from backend API
+  const currentUser = await getCurrentUser();
 
   return (
     <div className="flex min-h-screen flex-col justify-between">
       {/* Global Navigation Header */}
-      <Navbar currentUser={mockUser} />
+      <Navbar currentUser={currentUser} />
 
       {/* Main Content Area */}
       <main className="flex-1">{children}</main>

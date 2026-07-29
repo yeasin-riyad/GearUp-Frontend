@@ -41,8 +41,8 @@ export default function RootLayout({
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased scroll-smooth`}
     >
       <body className="flex min-h-full flex-col bg-background text-foreground">
-        <Toaster position="top-right" richColors />
         {children}
+        <Toaster position="top-right" richColors />
       </body>
     </html>
   );
