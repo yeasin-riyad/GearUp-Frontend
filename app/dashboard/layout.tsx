@@ -9,6 +9,7 @@ import {
   ShieldAlert,
   LogOut,
   type LucideIcon,
+  FolderTree,
 } from "lucide-react";
 import { getCurrentUser } from "@/service/auth.service";
 import { logout } from "@/service/logout";
@@ -47,7 +48,9 @@ export default async function DashboardLayout({
 
           {/* User Badge */}
           <div className="rounded-lg bg-muted p-3 text-xs">
-            <p className="font-semibold text-foreground truncate">{user.name}</p>
+            <p className="font-semibold text-foreground truncate">
+              {user.name}
+            </p>
             <p className="text-muted-foreground capitalize">
               {user.role?.toLowerCase()} Account
             </p>
@@ -57,24 +60,61 @@ export default async function DashboardLayout({
           <nav className="space-y-1">
             {user.role === "CUSTOMER" && (
               <>
-                <SidebarLink href="/dashboard/customer" icon={LayoutDashboard} label="Overview" />
-                <SidebarLink href="/dashboard/customer/rentals" icon={ShoppingBag} label="My Rentals" />
+                <SidebarLink
+                  href="/dashboard/customer"
+                  icon={LayoutDashboard}
+                  label="Overview"
+                />
+                <SidebarLink
+                  href="/dashboard/customer/rentals"
+                  icon={ShoppingBag}
+                  label="My Rentals"
+                />
               </>
             )}
 
             {user.role === "PROVIDER" && (
               <>
-                <SidebarLink href="/dashboard/provider" icon={LayoutDashboard} label="Overview" />
-                <SidebarLink href="/dashboard/provider/gear" icon={Package} label="My Inventory" />
-                <SidebarLink href="/dashboard/provider/orders" icon={ShoppingBag} label="Rental Requests" />
+                <SidebarLink
+                  href="/dashboard/provider"
+                  icon={LayoutDashboard}
+                  label="Overview"
+                />
+                <SidebarLink
+                  href="/dashboard/provider/gear"
+                  icon={Package}
+                  label="My Inventory"
+                />
+                <SidebarLink
+                  href="/dashboard/provider/orders"
+                  icon={ShoppingBag}
+                  label="Rental Requests"
+                />
               </>
             )}
 
             {user.role === "ADMIN" && (
               <>
-                <SidebarLink href="/dashboard/admin" icon={LayoutDashboard} label="Analytics" />
-                <SidebarLink href="/dashboard/admin/users" icon={Users} label="User Management" />
-                <SidebarLink href="/dashboard/admin/moderation" icon={ShieldAlert} label="Gear Moderation" />
+                <SidebarLink
+                  href="/dashboard/admin"
+                  icon={LayoutDashboard}
+                  label="Analytics"
+                />
+                <SidebarLink
+                  href="/dashboard/admin/categories"
+                  icon={FolderTree}
+                  label="Categories"
+                />
+                <SidebarLink
+                  href="/dashboard/admin/users"
+                  icon={Users}
+                  label="User Management"
+                />
+                <SidebarLink
+                  href="/dashboard/admin/moderation"
+                  icon={ShieldAlert}
+                  label="Gear Moderation"
+                />
               </>
             )}
           </nav>
