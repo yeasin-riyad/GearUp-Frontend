@@ -1,8 +1,8 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { cookies } from "next/headers";
 import { categorySchema, CategoryFormValues } from "@/schemas/category.schema";
+import { getAuthHeaders } from "@/service/getAuthHeaders";
 
 const API_BASE_URL =
   process.env.BACKEND_API_URL ;
@@ -18,16 +18,16 @@ export type ActionResponse<T = any> = {
 /**
  * Helper to fetch stored Auth Token from cookies
  */
-async function getAuthHeaders(): Promise<Record<string, string>> {
-  const cookieStore = await cookies();
-  // Adjust "accessToken" to match the exact key name you store your JWT in
-  const token = cookieStore.get("accessToken")?.value;
+// async function getAuthHeaders(): Promise<Record<string, string>> {
+//   const cookieStore = await cookies();
+//   // Adjust "accessToken" to match the exact key name you store your JWT in
+//   const token = cookieStore.get("accessToken")?.value;
 
-  return {
-    "Content-Type": "application/json",
-    Cookie: `accessToken=${token}`,
-  };
-}
+//   return {
+//     "Content-Type": "application/json",
+//     Cookie: `accessToken=${token}`,
+//   };
+// }
 
 /**
  * CREATE Category Action -> POST https://gearup-1-9p45.onrender.com/api/categories
@@ -41,7 +41,7 @@ export async function createCategoryAction(
     return {
       success: false,
       statusCode: 400,
-      message: validation.error.errors[0]?.message || "Invalid input data",
+      message:"Invalid input data",
     };
   }
 
@@ -94,7 +94,7 @@ export async function getCategoriesAction(
     const res = await fetch(url, {
       method: "GET",
       headers: { "Content-Type": "application/json" },
-      next: { tags: ["categories"] }, // optional Next.js caching tag
+      next: { tags: ["categories"] },
     });
 
     const result = await res.json();
@@ -179,7 +179,7 @@ export async function updateCategoryAction(
       return {
         success: false,
         statusCode: res.status,
-        message: result.message || "Failed to update category",
+        message:"Failed to update category",
       };
     }
 

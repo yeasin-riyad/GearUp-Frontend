@@ -8,11 +8,11 @@ import {
   Users,
   ShieldAlert,
   LogOut,
-  type LucideIcon,
   FolderTree,
 } from "lucide-react";
 import { getCurrentUser } from "@/service/auth.service";
 import { logout } from "@/service/logout";
+import { SidebarLink } from "@/components/dashboard/sidebar-link"; // Client component import
 
 export default async function DashboardLayout({
   children,
@@ -23,7 +23,7 @@ export default async function DashboardLayout({
 
   // 1. Unauthenticated Protection Guard
   if (!user) {
-    redirect("/login");
+    redirect("/auth/login");
   }
 
   // 2. Server Action for Logout
@@ -62,12 +62,12 @@ export default async function DashboardLayout({
               <>
                 <SidebarLink
                   href="/dashboard/customer"
-                  icon={LayoutDashboard}
+                  iconName="dashboard"
                   label="Overview"
                 />
                 <SidebarLink
                   href="/dashboard/customer/rentals"
-                  icon={ShoppingBag}
+                  iconName="rentals"
                   label="My Rentals"
                 />
               </>
@@ -77,17 +77,17 @@ export default async function DashboardLayout({
               <>
                 <SidebarLink
                   href="/dashboard/provider"
-                  icon={LayoutDashboard}
+                  iconName="dashboard"
                   label="Overview"
                 />
                 <SidebarLink
                   href="/dashboard/provider/gear"
-                  icon={Package}
+                  iconName="inventory"
                   label="My Inventory"
                 />
                 <SidebarLink
                   href="/dashboard/provider/orders"
-                  icon={ShoppingBag}
+                  iconName="rentals"
                   label="Rental Requests"
                 />
               </>
@@ -97,22 +97,22 @@ export default async function DashboardLayout({
               <>
                 <SidebarLink
                   href="/dashboard/admin"
-                  icon={LayoutDashboard}
+                  iconName="dashboard"
                   label="Analytics"
                 />
                 <SidebarLink
                   href="/dashboard/admin/categories"
-                  icon={FolderTree}
+                  iconName="categories"
                   label="Categories"
                 />
                 <SidebarLink
                   href="/dashboard/admin/users"
-                  icon={Users}
+                  iconName="users"
                   label="User Management"
                 />
                 <SidebarLink
                   href="/dashboard/admin/moderation"
-                  icon={ShieldAlert}
+                  iconName="moderation"
                   label="Gear Moderation"
                 />
               </>
@@ -135,25 +135,5 @@ export default async function DashboardLayout({
       {/* Main Content Area */}
       <main className="flex-1 p-8 overflow-y-auto">{children}</main>
     </div>
-  );
-}
-
-function SidebarLink({
-  href,
-  icon: Icon,
-  label,
-}: {
-  href: string;
-  icon: LucideIcon;
-  label: string;
-}) {
-  return (
-    <Link
-      href={href}
-      className="flex items-center gap-3 px-3 py-2 rounded-md text-sm font-medium text-muted-foreground hover:text-foreground hover:bg-muted/80 transition-colors"
-    >
-      <Icon className="h-4 w-4 text-primary" />
-      <span>{label}</span>
-    </Link>
   );
 }

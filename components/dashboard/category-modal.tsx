@@ -42,7 +42,7 @@ interface CategoryModalProps {
   } | null;
   open?: boolean;
   onOpenChange?: (open: boolean) => void;
-  trigger?: React.ReactNode;
+  trigger?: React.ReactElement;
 }
 
 export function CategoryModal({

@@ -52,19 +52,27 @@ export function DeleteCategoryDialog({
 
   return (
     <AlertDialog open={open} onOpenChange={setOpen}>
-      <AlertDialogTrigger asChild>
-        <Button size="icon" variant="ghost" className="text-destructive hover:text-destructive hover:bg-destructive/10">
-          <Trash2 className="h-4 w-4" />
-        </Button>
-      </AlertDialogTrigger>
+      <AlertDialogTrigger
+        render={
+          <Button
+            size="icon"
+            variant="ghost"
+            className="text-destructive hover:text-destructive hover:bg-destructive/10"
+          >
+            <Trash2 className="h-4 w-4" />
+          </Button>
+        }
+      />
 
       <AlertDialogContent>
         <AlertDialogHeader>
           <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
           <AlertDialogDescription>
             This action will permanently delete the category{" "}
-            <span className="font-semibold text-foreground">"{categoryName}"</span>.
-            This action cannot be undone.
+            <span className="font-semibold text-foreground">
+              {categoryName}
+            </span>
+            . This action cannot be undone.
           </AlertDialogDescription>
         </AlertDialogHeader>
 

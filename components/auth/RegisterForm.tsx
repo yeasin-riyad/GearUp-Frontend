@@ -60,7 +60,7 @@ export function RegisterForm() {
         );
         // Short delay for user to read toast
         setTimeout(() => {
-          router.push("/login");
+          router.push("/auth/login");
         }, 1200);
       } else {
         toast.error(result.message || "Registration failed. Please try again.");
@@ -249,7 +249,7 @@ export function RegisterForm() {
       <div className="text-center text-xs text-muted-foreground pt-2 border-t">
         Already have an account?{" "}
         <Link
-          href="/login"
+          href="/auth/login"
           className="font-semibold text-primary hover:underline"
         >
           Sign in here

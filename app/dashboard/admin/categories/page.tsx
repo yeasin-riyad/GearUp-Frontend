@@ -12,7 +12,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Edit, ChevronLeft, ChevronRight, Search } from "lucide-react";
+import { Edit, ChevronLeft, ChevronRight } from "lucide-react";
 import { CategorySearch } from "@/components/dashboard/category-search";
 
 interface AdminCategoriesPageProps {
@@ -37,7 +37,7 @@ export default async function AdminCategoriesPage({
     sortBy: resolvedSearchParams.sortBy || "createdAt",
     sortOrder: resolvedSearchParams.sortOrder || "desc",
     page: resolvedSearchParams.page || "1",
-    limit: resolvedSearchParams.limit || "10",
+    limit: resolvedSearchParams.limit || "5",
   };
 
   // 2. Fetch categories passing query parameters to QueryBuilder backend

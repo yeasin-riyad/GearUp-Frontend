@@ -15,14 +15,14 @@ export default async function ProfilePage() {
 
   // Redirect to login if user is not authenticated
   if (!token) {
-    redirect("/login");
+    redirect("/auth/login");
   }
 
    const user = await getCurrentUser();
  
 
   if (!user) {
-    redirect("/login");
+    redirect("/auth/login");
   }
 
   return (

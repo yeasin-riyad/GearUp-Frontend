@@ -5,7 +5,7 @@ import { NextResponse } from 'next/server';
 import { getNewAccessToken } from "./service/refreshToken";
 import { jwtUtils } from "./utils/jwt";
 
-const AUTH_ROUTES = ["/login", "/register"];
+const AUTH_ROUTES = ["/auth/login", "/auth/register"];
 const PUBLIC_ROUTES = ["/", "/news", "/gear", "/about", "/contact", "/privacy", "/terms"];
 
 export default async function proxy(request: NextRequest) {
@@ -78,7 +78,7 @@ export default async function proxy(request: NextRequest) {
 
   // 3. Unauthenticated protection
   if (!accessToken && !isPublicRoute && !isAuthRoute) {
-    return NextResponse.redirect(new URL('/login', request.url));
+    return NextResponse.redirect(new URL('/auth/login', request.url));
   }
 
   // 4. Role-based access control
