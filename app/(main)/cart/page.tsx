@@ -17,6 +17,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Skeleton } from "@/components/ui/skeleton";
 import { toast } from "sonner";
+import { processCheckoutAction } from "@/actions/checkout";
 
 export default function CartPage() {
   const router = useRouter();
@@ -51,7 +52,7 @@ export default function CartPage() {
   const dailySubtotal = useMemo(() => {
     return cart.reduce(
       (sum, item) => sum + item.pricePerDay * item.quantity,
-      0,
+      0
     );
   }, [cart]);
 
@@ -61,7 +62,7 @@ export default function CartPage() {
   const handleQuantityChange = (
     gearItemId: string,
     newQty: number,
-    currentStock: number,
+    currentStock: number
   ) => {
     if (isNaN(newQty) || newQty < 1) {
       toast.error("Quantity must be at least 1.");
@@ -77,46 +78,56 @@ export default function CartPage() {
     updateQuantity(gearItemId, newQty);
   };
 
-  // Submit order matching backend validation requirements
-  const handleCheckout = async () => {
-    if (cart.length === 0) {
-      toast.error("Your cart is empty.");
-      return;
+  // Submit order & initiate Stripe Checkout
+ const handleCheckout = async () => {
+  if (cart.length === 0) {
+    toast.error("Your cart is empty.");
+    return;
+  }
+
+  if (!startDate || !endDate) {
+    toast.error("Please select both start and end rental dates.");
+    return;
+  }
+
+  if (rentalDays <= 0) {
+    toast.error("End date must be after the start date.");
+    return;
+  }
+
+  try {
+    setIsSubmitting(true);
+
+ 
+
+    const payload = {
+      startDate,
+      endDate,
+      providerId: cart[0].providerId,
+      items: cart.map((item) => ({
+        gearItemId: item.gearItemId,
+        quantity: item.quantity,
+      })),
+    };
+
+    // Call Server Action
+    const result = await processCheckoutAction(payload);
+
+    if (!result.success || !result.checkoutUrl) {
+      throw new Error(result.error || "Failed to initiate checkout.");
     }
 
-    if (!startDate || !endDate) {
-      toast.error("Please select both start and end rental dates.");
-      return;
-    }
+    toast.success("Redirecting to Stripe...");
+    clearCart();
 
-    if (rentalDays <= 0) {
-      toast.error("End date must be after the start date.");
-      return;
-    }
-
-    try {
-      setIsSubmitting(true);
-
-      const payload = {
-        startDate,
-        endDate,
-        providerId: cart[0].providerId,
-        items: cart.map((item) => ({
-          gearItemId: item.gearItemId,
-          quantity: item.quantity,
-        })),
-      };
-
-      toast.success("Rental request submitted successfully!");
-      clearCart();
-      router.push("/dashboard/rentals");
-    } catch (err: unknown) {
-      const error = err as Error;
-      toast.error(error.message || "Failed to place rental request.");
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
+    // Redirect user to Stripe Hosted Checkout
+    window.location.href = result.checkoutUrl;
+  } catch (err: unknown) {
+    const error = err as Error;
+    toast.error(error.message || "Checkout failed.");
+    setIsSubmitting(false);
+  }
+};
 
   if (!isInitialized) {
     return <CartSkeleton />;
@@ -195,7 +206,7 @@ function CartItemCard({
   onQuantityChange: (
     gearItemId: string,
     newQty: number,
-    currentStock: number,
+    currentStock: number
   ) => void;
   onRemove: (gearItemId: string) => void;
 }) {
@@ -247,7 +258,7 @@ function CartItemCard({
               onQuantityChange(
                 item.gearItemId,
                 parseInt(e.target.value) || 1,
-                item.stock,
+                item.stock
               )
             }
             className="w-16 h-9 text-center text-sm"
@@ -371,7 +382,7 @@ function CartSummary({
           disabled={isSubmitting || cartCount === 0}
           className="w-full h-11 font-semibold"
         >
-          {isSubmitting ? "Submitting Request..." : "Request to Rent All"}
+          {isSubmitting ? "Redirecting to Stripe..." : "Request to Rent All"}
         </Button>
       </div>
     </div>
