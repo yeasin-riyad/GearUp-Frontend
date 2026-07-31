@@ -2,13 +2,7 @@ import { redirect } from "next/navigation";
 import Link from "next/link";
 import {
   Dumbbell,
-  LayoutDashboard,
-  ShoppingBag,
-  Package,
-  Users,
-  ShieldAlert,
-  LogOut,
-  FolderTree,
+  LogOut
 } from "lucide-react";
 import { getCurrentUser } from "@/service/auth.service";
 import { logout } from "@/service/logout";
@@ -81,7 +75,7 @@ export default async function DashboardLayout({
                   label="Overview"
                 />
                 <SidebarLink
-                  href="/dashboard/provider/gear"
+                  href="/dashboard/provider/gear/new"
                   iconName="inventory"
                   label="My Inventory"
                 />
@@ -90,6 +84,7 @@ export default async function DashboardLayout({
                   iconName="rentals"
                   label="Rental Requests"
                 />
+            
               </>
             )}
 

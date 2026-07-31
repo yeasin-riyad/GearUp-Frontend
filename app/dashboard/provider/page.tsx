@@ -1,9 +1,7 @@
 // app/(dashboard)/provider/page.tsx
 import { redirect } from "next/navigation";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { DollarSign, Package, TrendingUp, Plus } from "lucide-react";
-import Link from "next/link";
+import { DollarSign, Package, TrendingUp } from "lucide-react";
 import { getCurrentUser } from "@/service/auth.service";
 
 export default async function ProviderDashboardPage() {
@@ -20,11 +18,11 @@ export default async function ProviderDashboardPage() {
           <h1 className="text-2xl font-bold tracking-tight">Provider Portal 🛠️</h1>
           <p className="text-muted-foreground">Track listings, earnings, and customer orders.</p>
         </div>
-        <Link href="/dashboard/provider/gear/new">
+        {/* <Link href="/dashboard/provider/gear/new">
           <Button className="gap-2">
             <Plus className="h-4 w-4" /> Add Gear
           </Button>
-        </Link>
+        </Link> */}
       </div>
 
       <div className="grid gap-4 md:grid-cols-3">
