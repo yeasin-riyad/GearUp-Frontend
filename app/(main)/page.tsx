@@ -13,12 +13,12 @@ export default async function HomePage() {
       <HeroSection />
 
       {/* Featured Items / Products Section */}
-      <section className="container py-12">
+      <section className="container py-2">
         <FeaturedGear />
       </section>
 
       {/* Workflow / Features Section */}
-      <section className="bg-muted/50 py-12">
+      <section className="bg-muted/50 py-2">
         <HowItWorks />
       </section>
     </main>
