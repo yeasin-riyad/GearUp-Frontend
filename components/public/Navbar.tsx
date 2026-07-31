@@ -1,9 +1,10 @@
+// src/components/navbar/Navbar.tsx
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Dumbbell, Menu } from "lucide-react";
+import { Dumbbell, Menu, ShoppingCart } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -17,6 +18,7 @@ import { UserMenu } from "./UserMenu";
 import { User } from "@/types/auth";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { logout } from "@/service/logout";
+import { useCart } from "@/context/CartContext";
 
 interface NavbarProps {
   currentUser?: User | null;
@@ -25,8 +27,17 @@ interface NavbarProps {
 export function Navbar({ currentUser = null }: NavbarProps) {
   const pathname = usePathname();
   const [isOpen, setIsOpen] = useState(false);
+  const [mounted, setMounted] = useState(false);
+
+  // Destructure totalCartItems and isInitialized
+  const { totalCartItems = 0, isInitialized } = useCart();
 
   const user = currentUser;
+
+  // Prevent hydration mismatch by ensuring cart badge renders after client mount
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   const publicNavLinks = [
     { name: "Home", href: "/" },
@@ -39,6 +50,9 @@ export function Navbar({ currentUser = null }: NavbarProps) {
     if (path === "/") return pathname === "/";
     return pathname.startsWith(path);
   };
+
+  // Safely display cart count only when client is mounted & context initialized
+  const showBadge = mounted && isInitialized && totalCartItems > 0;
 
   return (
     <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/85 backdrop-blur-md supports-[backdrop-filter]:bg-background/60">
@@ -70,8 +84,21 @@ export function Navbar({ currentUser = null }: NavbarProps) {
           ))}
         </nav>
 
-        {/* Right Action Section (Auth vs Public) */}
+        {/* Right Action Section */}
         <div className="hidden md:flex items-center gap-3">
+          {/* Desktop Cart Icon */}
+          <Link href="/cart" className="relative">
+            <Button variant="ghost" size="icon" className="relative h-9 w-9">
+              <ShoppingCart className="h-5 w-5 text-foreground" />
+              {showBadge && (
+                <span className="absolute -top-1 -right-1 flex h-5 w-5 items-center justify-center rounded-full bg-primary text-[10px] font-bold text-primary-foreground animate-in zoom-in-50 duration-200">
+                  {totalCartItems > 99 ? "99+" : totalCartItems}
+                </span>
+              )}
+              <span className="sr-only">Cart Items</span>
+            </Button>
+          </Link>
+
           {user ? (
             <div className="flex items-center gap-3">
               {user.role === "PROVIDER" && (
@@ -107,14 +134,31 @@ export function Navbar({ currentUser = null }: NavbarProps) {
 
         {/* Mobile Hamburger Drawer */}
         <div className="flex md:hidden items-center gap-2">
+          {/* Mobile Cart Icon */}
+          <Link href="/cart" className="relative">
+            <Button variant="ghost" size="icon" className="relative h-9 w-9">
+              <ShoppingCart className="h-5 w-5 text-foreground" />
+              {showBadge && (
+                <span className="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-primary text-[9px] font-bold text-primary-foreground animate-in zoom-in-50 duration-200">
+                  {totalCartItems > 99 ? "99+" : totalCartItems}
+                </span>
+              )}
+            </Button>
+          </Link>
+
           <Sheet open={isOpen} onOpenChange={setIsOpen}>
             <SheetTrigger
-              render={
-                <Button variant="ghost" size="icon" className="h-9 w-9">
+              render={(props) => (
+                <Button
+                  {...props}
+                  variant="ghost"
+                  size="icon"
+                  className="h-9 w-9"
+                >
                   <Menu className="h-5 w-5" />
                   <span className="sr-only">Toggle Menu</span>
                 </Button>
-              }
+              )}
             />
 
             <SheetContent side="right" className="w-75 sm:w-87.5 p-6">

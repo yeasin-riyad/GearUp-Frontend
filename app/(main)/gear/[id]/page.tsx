@@ -18,6 +18,7 @@ import { cn } from "@/lib/utils";
 // API Action & Sidebar Import
 import { BookingSidebar } from "@/components/gear/BookingSidebar"; // Sidebar Component
 import { getSingleGearAction } from "@/actions/gear.action";
+import { getCurrentUser } from "@/service/auth.service";
 
 // Backend API response TypeScript Type definition
 interface GearDetail {
@@ -51,6 +52,8 @@ export default async function GearDetailPage({
   const { id } = await params;
 
   const response = await getSingleGearAction(id);
+  // Fetch user server-side
+  const currentUser = await getCurrentUser();
 
   if (!response?.success || !response?.data) {
     notFound(); 
@@ -222,9 +225,8 @@ export default async function GearDetailPage({
 
           {/* Right Column: Dynamic Booking Sidebar Component */}
           <div>
-            <BookingSidebar 
-              pricePerDay={gear.pricePerDay} 
-              deposit={gear.deposit ?? 0} 
+            <BookingSidebar gearItem={gear} currentUser={currentUser}
+             
             />
           </div>
 
