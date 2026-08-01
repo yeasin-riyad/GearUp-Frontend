@@ -59,7 +59,7 @@ function SuccessContent() {
           variant="outline"
           className="w-full sm:w-auto h-12 px-6 text-sm font-medium"
           render={(props) => (
-            <Link {...props} href="/rentals">
+            <Link {...props} href="/dashboard/customer/rentals">
               <ShoppingBag className="mr-2 h-4 w-4" />
               <span>View My Rentals</span>
             </Link>

@@ -28,7 +28,6 @@ export async function processCheckoutAction(
   try {
     // Collect Auth Header from parameter or HTTP-only cookie
         const headers = await getAuthHeaders();
-        console.log(payload,"Payload data..");
     
 
     // 1. Create Rental Order

@@ -139,7 +139,7 @@ export function UserMenu({ user, onLogout }: UserMenuProps) {
             <DropdownMenuItem
               className="cursor-pointer"
               render={
-                <Link href="/dashboard/customer" className="flex items-center w-full">
+                <Link href="/dashboard/customer/rentals" className="flex items-center w-full">
                   <ShoppingBag className="mr-2 h-4 w-4 text-muted-foreground" />
                   <span>My Rentals</span>
                 </Link>
