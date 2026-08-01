@@ -133,7 +133,7 @@ export default function MyRentalsPage() {
         <Button
           className="h-12 px-6 text-sm font-medium"
           render={(props) => (
-            <Link {...props} href="/gear">
+            <Link {...props} href="/gears">
               <ShoppingBag className="mr-2 h-4 w-4" />
               <span>Browse Available Gear</span>
             </Link>

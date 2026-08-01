@@ -2,7 +2,6 @@
 "use server";
 
 import { getAuthHeaders } from "@/service/getAuthHeaders";
-import { cookies } from "next/headers";
 
 const API_BASE_URL = process.env.BACKEND_API_URL;
 

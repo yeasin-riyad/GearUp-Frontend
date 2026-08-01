@@ -69,7 +69,7 @@ function SuccessContent() {
         <Button
           className="w-full sm:w-auto h-12 px-6 text-sm font-medium"
           render={(props) => (
-            <Link {...props} href="/gear">
+            <Link {...props} href="/gears">
               <span>Explore More Gear</span>
               <ArrowRight className="ml-2 h-4 w-4" />
             </Link>

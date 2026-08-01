@@ -7,6 +7,9 @@ import { getAuthHeaders } from "@/service/getAuthHeaders";
 const API_BASE_URL =
   process.env.BACKEND_API_URL ;
 
+// const API_BASE_URL ="http://localhost:5000/api";
+
+
 export type ActionResponse<T = any> = {
   success: boolean;
   statusCode: number;
@@ -64,7 +67,7 @@ export async function createCategoryAction(
     }
 
     revalidatePath("/dashboard/admin/categories");
-    revalidatePath("/gear");
+    revalidatePath("/gears");
 
     return {
       success: true,
@@ -184,7 +187,7 @@ export async function updateCategoryAction(
     }
 
     revalidatePath("/dashboard/admin/categories");
-    revalidatePath("/gear");
+    revalidatePath("/gears");
 
     return {
       success: true,
@@ -223,7 +226,7 @@ export async function deleteCategoryAction(id: string): Promise<ActionResponse> 
     }
 
     revalidatePath("/dashboard/admin/categories");
-    revalidatePath("/gear");
+    revalidatePath("/gears");
 
     return {
       success: true,

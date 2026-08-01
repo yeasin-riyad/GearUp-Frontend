@@ -51,7 +51,7 @@ export async function FeaturedGear() {
           </div>
           
           <Link 
-            href="/gear" 
+            href="/gears" 
             className={cn(buttonVariants({ variant: "ghost", size: "sm" }), "hidden sm:inline-flex group text-primary")}
           >
             Explore all items
@@ -131,7 +131,7 @@ export async function FeaturedGear() {
         {/* Mobile View All Button */}
         <div className="mt-8 text-center sm:hidden">
           <Link 
-            href="/gear" 
+            href="/gears" 
             className={cn(buttonVariants({ variant: "outline" }), "w-full")}
           >
             Explore all items

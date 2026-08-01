@@ -73,7 +73,7 @@ export default async function GearDetailPage({
         {/* Navigation Breadcrumb & Actions */}
         <div className="flex items-center justify-between mb-6">
           <Link
-            href="/gear"
+            href="/gears"
             className={cn(
               buttonVariants({ variant: "ghost", size: "sm" }),
               "text-muted-foreground hover:text-foreground pl-0"

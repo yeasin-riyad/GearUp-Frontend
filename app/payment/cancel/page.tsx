@@ -61,7 +61,7 @@ function CancelContent() {
           variant="outline"
           className="w-full sm:w-auto h-12 px-6 text-sm font-medium"
           render={(props) => (
-            <Link {...props} href="/gear">
+            <Link {...props} href="/gears">
               <ArrowLeft className="mr-2 h-4 w-4" />
               <span>Continue Browsing</span>
             </Link>

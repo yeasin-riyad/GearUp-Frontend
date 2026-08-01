@@ -170,7 +170,7 @@ export default function CartPage() {
           ))}
 
           <Link
-            href="/gear"
+            href="/gears"
             className="inline-flex items-center text-sm font-medium text-primary hover:underline pt-2"
           >
             <ArrowLeft className="mr-1 h-4 w-4" /> Continue browsing gear
@@ -406,7 +406,7 @@ function EmptyCartState() {
       <Button
         className="mt-4 my-2 px-4 py-2.5 flex items-center justify-center gap-2"
         render={(props) => (
-          <Link {...props} href="/gear">
+          <Link {...props} href="/gears">
             <ArrowLeft className="h-4 w-4" />
             <span>Browse Gear</span>
           </Link>
