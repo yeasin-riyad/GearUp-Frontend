@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Package} from "lucide-react";
+import { Package } from "lucide-react";
 import { toast } from "sonner";
 
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -23,7 +23,7 @@ import {
 import { RentalCard } from "./rental-card";
 
 export type ActionConfig = {
-  type: "confirm" | "pick-up" | "return";
+  type: "confirm" | "ready" | "pick-up" | "return";
   title: string;
   description: string;
   buttonLabel: string;
@@ -33,23 +33,34 @@ export type ActionConfig = {
 
 export function getActionConfig(status: string): ActionConfig | null {
   switch (status) {
-    case "PAID":
+    case "PLACED":
       return {
         type: "confirm",
         title: "Confirm Rental Order",
         description:
-          "Are you sure you want to confirm this order? The customer will be notified that their order is accepted.",
+          "Are you sure you want to confirm this order? The customer will be notified to make the payment.",
         buttonLabel: "Confirm Order",
         badgeLabel: "Awaiting Confirmation",
+        variant: "default",
+      };
+    case "PAID":
+      return {
+        type: "ready",
+        title: "Mark as Ready for Pickup",
+        description:
+          "Confirm that the gear is prepared and ready for customer pickup.",
+        buttonLabel: "Ready for Pickup",
+        badgeLabel: "Payment Received",
         variant: "default",
       };
     case "CONFIRMED":
       return {
         type: "pick-up",
         title: "Mark as Picked Up",
-        description: "Confirm that the customer has picked up the rental equipment.",
+        description:
+          "Confirm that the customer has picked up the rental equipment.",
         buttonLabel: "Confirm Pick Up",
-        badgeLabel: "Ready for Pickup",
+        badgeLabel: "Awaiting Pickup",
         variant: "secondary",
       };
     case "PICKED_UP":
@@ -106,6 +117,7 @@ export function ProviderRentalsClient({ initialRentals }: ProviderRentalsClientP
 
         const nextStatusMap: Record<string, ProviderRentalOrder["status"]> = {
           confirm: "CONFIRMED",
+          ready: "CONFIRMED",
           "pick-up": "PICKED_UP",
           return: "RETURNED",
         };
@@ -143,13 +155,16 @@ export function ProviderRentalsClient({ initialRentals }: ProviderRentalsClientP
 
       {/* Filter Tabs */}
       <Tabs defaultValue="ALL" onValueChange={setActiveTab} className="w-full">
-        <TabsList className="grid w-full grid-cols-5 max-w-2xl">
+        <TabsList className="grid w-full grid-cols-3 md:grid-cols-6 max-w-3xl">
           <TabsTrigger value="ALL">All ({rentals.length})</TabsTrigger>
-          <TabsTrigger value="PAID">
-            Paid ({rentals.filter((r) => r.status === "PAID").length})
+          <TabsTrigger value="PLACED">
+            Placed ({rentals.filter((r) => r.status === "PLACED").length})
           </TabsTrigger>
           <TabsTrigger value="CONFIRMED">
             Confirmed ({rentals.filter((r) => r.status === "CONFIRMED").length})
+          </TabsTrigger>
+          <TabsTrigger value="PAID">
+            Paid ({rentals.filter((r) => r.status === "PAID").length})
           </TabsTrigger>
           <TabsTrigger value="PICKED_UP">
             Active ({rentals.filter((r) => r.status === "PICKED_UP").length})
