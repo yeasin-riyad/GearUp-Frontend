@@ -12,6 +12,8 @@ interface GearItem {
   id: string;
   name: string;
   pricePerDay: number;
+  averageRating: number;
+  reviewCount: number;
   images?: string[];
   location?: string;
   rating?: number;
@@ -38,7 +40,6 @@ export async function FeaturedGear() {
   return (
     <section className="py-10 md:py-14 bg-background">
       <div className="container mx-auto px-4 md:px-6">
-        
         {/* Section Header */}
         <div className="flex flex-col sm:flex-row sm:items-end justify-between mb-8 gap-4">
           <div>
@@ -49,10 +50,13 @@ export async function FeaturedGear() {
               Top-rated equipment available for your next trip.
             </p>
           </div>
-          
-          <Link 
-            href="/gears" 
-            className={cn(buttonVariants({ variant: "ghost", size: "sm" }), "hidden sm:inline-flex group text-primary")}
+
+          <Link
+            href="/gears"
+            className={cn(
+              buttonVariants({ variant: "ghost", size: "sm" }),
+              "hidden sm:inline-flex group text-primary",
+            )}
           >
             Explore all items
             <ArrowRight className="ml-1.5 h-4 w-4 group-hover:translate-x-1 transition-transform" />
@@ -69,7 +73,7 @@ export async function FeaturedGear() {
                 : "https://images.unsplash.com/photo-1516035069371-29a1b244cc32?q=80&w=600&auto=format&fit=crop";
 
             return (
-              <div 
+              <div
                 key={item.id}
                 className="group rounded-xl border bg-card text-card-foreground overflow-hidden shadow-xs hover:shadow-md transition-all duration-300 flex flex-col"
               >
@@ -83,7 +87,12 @@ export async function FeaturedGear() {
                     sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
                   />
                   {item.category?.name && (
-                    <span className={cn(badgeVariants({ variant: "secondary" }), "absolute top-3 left-3 text-[11px] font-medium backdrop-blur-md bg-background/80")}>
+                    <span
+                      className={cn(
+                        badgeVariants({ variant: "secondary" }),
+                        "absolute top-3 left-3 text-[11px] font-medium backdrop-blur-md bg-background/80",
+                      )}
+                    >
                       {item.category.name}
                     </span>
                   )}
@@ -99,7 +108,12 @@ export async function FeaturedGear() {
                       </span>
                       <span className="flex items-center gap-1 font-medium text-foreground">
                         <Star className="h-3.5 w-3.5 fill-amber-400 text-amber-400" />
-                        {item.rating ?? 5.0} ({item.reviewsCount ?? 0})
+
+                        {Number(item.averageRating).toFixed(1)}
+
+                        <span className="text-muted-foreground">
+                          ({item.reviewCount})
+                        </span>
                       </span>
                     </div>
 
@@ -111,13 +125,21 @@ export async function FeaturedGear() {
                   {/* Footer / Price */}
                   <div className="flex items-center justify-between pt-2 border-t text-sm">
                     <div>
-                      <span className="font-bold text-base text-foreground">${item.pricePerDay}</span>
-                      <span className="text-xs text-muted-foreground"> / day</span>
+                      <span className="font-bold text-base text-foreground">
+                        ${item.pricePerDay}
+                      </span>
+                      <span className="text-xs text-muted-foreground">
+                        {" "}
+                        / day
+                      </span>
                     </div>
 
-                    <Link 
+                    <Link
                       href={`/gear/${item.id}`}
-                      className={cn(buttonVariants({ variant: "outline", size: "sm" }), "h-8 text-xs font-medium")}
+                      className={cn(
+                        buttonVariants({ variant: "outline", size: "sm" }),
+                        "h-8 text-xs font-medium",
+                      )}
                     >
                       View Details
                     </Link>
@@ -130,15 +152,14 @@ export async function FeaturedGear() {
 
         {/* Mobile View All Button */}
         <div className="mt-8 text-center sm:hidden">
-          <Link 
-            href="/gears" 
+          <Link
+            href="/gears"
             className={cn(buttonVariants({ variant: "outline" }), "w-full")}
           >
             Explore all items
             <ArrowRight className="ml-2 h-4 w-4" />
           </Link>
         </div>
-
       </div>
     </section>
   );

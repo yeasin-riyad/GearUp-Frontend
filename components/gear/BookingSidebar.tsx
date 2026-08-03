@@ -1,4 +1,3 @@
-// src/components/gear/BookingSidebar.tsx
 "use client";
 
 import { useState, useMemo } from "react";
@@ -8,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useCart } from "@/context/CartContext";
 import { toast } from "sonner";
+import { processCheckoutAction } from "@/actions/checkout";
 
 interface GearItem {
   id: string;
@@ -15,9 +15,12 @@ interface GearItem {
   pricePerDay: number;
   deposit?: number;
   stock: number;
-  providerId: string;
+  providerId?: string;
+  provider?: {
+    id?: string;
+  };
   availability: string;
-  image?: string;
+  images?: string[];
 }
 
 interface BookingSidebarProps {
@@ -38,16 +41,17 @@ export function BookingSidebar({
   const [quantity, setQuantity] = useState<number>(1);
   const [isLoading, setIsLoading] = useState(false);
 
-  console.log(gearItem,"Gear...")
+  // Derive provider ID safely from gearItem
+  const providerId = gearItem.providerId || gearItem.provider?.id || "";
 
-  // Today's date string (YYYY-MM-DD)
+  // Minimum date selection constraint (Today)
   const todayStr = useMemo(() => {
     const today = new Date();
     today.setHours(0, 0, 0, 0);
     return today.toISOString().split("T")[0];
   }, []);
 
-  // Calculate rental days based on start and end dates
+  // Calculate rental duration in days
   const rentalDays = useMemo(() => {
     if (!startDate || !endDate) return 0;
     const start = new Date(startDate);
@@ -61,7 +65,7 @@ export function BookingSidebar({
     return Math.ceil(diffTime / (1000 * 60 * 60 * 24));
   }, [startDate, endDate]);
 
-  // Price calculations
+  // Pricing calculations
   const pricePerDay = gearItem?.pricePerDay ?? 0;
   const deposit = gearItem?.deposit ?? 0;
   const stock = gearItem?.stock ?? 0;
@@ -70,7 +74,7 @@ export function BookingSidebar({
   const subtotal = pricePerDay * quantity * (rentalDays || 1);
   const grandTotal = subtotal + deposit;
 
-  // Add item to local cart
+  // Local cart handler
   const handleAddToCart = () => {
     if (!isAvailable) {
       toast.error("This gear item is currently unavailable.");
@@ -82,13 +86,13 @@ export function BookingSidebar({
       name: gearItem.name,
       pricePerDay: gearItem.pricePerDay,
       stock: gearItem.stock,
-      providerId: gearItem.providerId,
+      providerId: providerId,
       quantity: quantity,
-      image: gearItem.images[0],
+      image: gearItem.images?.[0] || "",
     });
   };
 
-  // Direct rental submission matching backend validation rules
+  // Direct single-item rental checkout request
   const handleRentalRequest = async () => {
     // 1. Authentication check
     if (!currentUser) {
@@ -97,9 +101,9 @@ export function BookingSidebar({
       return;
     }
 
-    // 2. Date presence check
+    // 2. Date validations
     if (!startDate || !endDate) {
-      toast.error("Please select both start and end dates.");
+      toast.error("Please select both start and end rental dates.");
       return;
     }
 
@@ -111,7 +115,6 @@ export function BookingSidebar({
     const today = new Date();
     today.setHours(0, 0, 0, 0);
 
-    // 3. Date validity checks
     if (start < today) {
       toast.error("Start date cannot be in the past.");
       return;
@@ -122,7 +125,7 @@ export function BookingSidebar({
       return;
     }
 
-    // 4. Quantity and stock checks
+    // 3. Quantity & stock check
     if (quantity < 1) {
       toast.error("Quantity must be at least 1.");
       return;
@@ -133,12 +136,18 @@ export function BookingSidebar({
       return;
     }
 
+    if (!providerId) {
+      toast.error("Unable to identify gear provider.");
+      return;
+    }
+
     try {
       setIsLoading(true);
 
       const payload = {
         startDate,
         endDate,
+        providerId: providerId,
         items: [
           {
             gearItemId: gearItem.id,
@@ -147,21 +156,25 @@ export function BookingSidebar({
         ],
       };
 
-      // Call your backend Server Action or API endpoint here:
-      // await createRentalOrderAction(payload);
+      // Call Server Action
+      const result = await processCheckoutAction(payload);
 
-      toast.success("Rental request submitted successfully!");
+      if (!result.success || !result.checkoutUrl) {
+        throw new Error(result.error || "Failed to initiate checkout.");
+      }
+
+      toast.success("Redirecting to checkout...");
+      window.location.href = result.checkoutUrl;
     } catch (err: unknown) {
       const error = err as Error;
       toast.error(error.message || "Failed to submit rental request.");
-    } finally {
       setIsLoading(false);
     }
   };
 
   return (
     <div className="sticky top-20 rounded-2xl border bg-card p-6 shadow-md space-y-6">
-      {/* Price Header */}
+      {/* Header Pricing */}
       <div className="flex items-baseline justify-between">
         <div>
           <span className="text-3xl font-extrabold text-foreground">
@@ -169,14 +182,14 @@ export function BookingSidebar({
           </span>
           <span className="text-muted-foreground text-sm"> / day</span>
         </div>
-        <span className="text-xs text-muted-foreground bg-muted px-2.5 py-1 rounded-md">
+        <span className="text-xs text-muted-foreground bg-muted px-2.5 py-1 rounded-md font-medium">
           Deposit: ${deposit}
         </span>
       </div>
 
       <hr className="border-border" />
 
-      {/* Date & Quantity Inputs */}
+      {/* Date and Quantity Pickers */}
       <div className="space-y-4">
         <div className="space-y-2">
           <label className="text-xs font-medium text-foreground">
@@ -225,7 +238,7 @@ export function BookingSidebar({
         </div>
       </div>
 
-      {/* Dynamic Price Breakdown */}
+      {/* Breakdown */}
       <div className="space-y-2 text-sm pt-2">
         <div className="flex justify-between text-muted-foreground">
           <span>
@@ -253,7 +266,7 @@ export function BookingSidebar({
           disabled={isLoading || !isAvailable}
           className="w-full h-11 text-base font-semibold shadow-xs"
         >
-          {isLoading ? "Processing..." : "Request to Rent"}
+          {isLoading ? "Redirecting to Stripe..." : "Request to Rent"}
         </Button>
 
         <Button

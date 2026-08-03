@@ -136,6 +136,7 @@ export function UserMenu({ user, onLogout }: UserMenuProps) {
         {/* Dynamic Menu Options Based on Role */}
         <DropdownMenuGroup>
           {user.role === "CUSTOMER" && (
+           <>
             <DropdownMenuItem
               className="cursor-pointer"
               render={
@@ -145,6 +146,20 @@ export function UserMenu({ user, onLogout }: UserMenuProps) {
                 </Link>
               }
             />
+
+             <DropdownMenuItem
+              className="cursor-pointer"
+              render={
+                <Link href="/dashboard/customer/reviews" className="flex items-center w-full">
+                  <ShoppingBag className="mr-2 h-4 w-4 text-muted-foreground" />
+                  <span>My Reviews</span>
+                </Link>
+              }
+            />
+           
+           </>
+
+            
           )}
 
           {user.role === "PROVIDER" && (

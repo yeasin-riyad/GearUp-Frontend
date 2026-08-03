@@ -23,15 +23,17 @@ interface Category {
 
 interface GearItem {
   id: string;
-  title: string;
+  name: string;
   brand?: string;
-  category?: Category | string;
+  category?: Category;
   pricePerDay: number;
-  rating?: number;
-  reviewsCount?: number;
+
+  averageRating: number;
+  reviewCount: number;
+
   location?: string;
-  images?: string[]; // Array of strings
-  isAvailable?: boolean;
+  images?: string[];
+  availability: "AVAILABLE" | "UNAVAILABLE";
 }
 
 interface PageProps {
@@ -50,6 +52,7 @@ export default async function GearListingPage({ searchParams }: PageProps) {
   const gears: GearItem[] = gearsResponse?.data || [];
   const meta = gearsResponse?.meta;
   const categories: Category[] = categoriesResponse?.data || [];
+  console.log(gears, "Gears..");
 
   // ফেচ করা গিয়ার্স ডাটা থেকে ইউনিক ব্র্যান্ড লিস্ট তৈরি করা
   const availableBrands = Array.from(
@@ -123,7 +126,7 @@ export default async function GearListingPage({ searchParams }: PageProps) {
                       <div className="relative aspect-[4/3] w-full overflow-hidden bg-muted">
                         {primaryImage ? (
                           <Image
-                            alt={item?.title || "Gear Image"}
+                            alt={item.name || "Gear Image"}
                             src={primaryImage}
                             fill
                             className="object-cover group-hover:scale-105 transition-transform duration-300"
@@ -178,12 +181,17 @@ export default async function GearListingPage({ searchParams }: PageProps) {
                             </span>
                             <span className="flex items-center gap-1 font-medium text-foreground">
                               <Star className="h-3.5 w-3.5 fill-amber-400 text-amber-400" />
-                              {item.rating ?? "5.0"} ({item.reviewsCount ?? 0})
+
+                              {Number(item.averageRating).toFixed(1)}
+
+                              <span className="text-muted-foreground">
+                                ({item.reviewCount})
+                              </span>
                             </span>
                           </div>
 
                           <h3 className="font-semibold text-base line-clamp-1 group-hover:text-primary transition-colors">
-                            {item.title}
+                            {item.name}
                           </h3>
                         </div>
 

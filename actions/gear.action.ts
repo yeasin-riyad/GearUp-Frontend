@@ -95,54 +95,6 @@ export async function getAllGearsAction(queryParams?: Record<string, string>) {
   }
 }
 
-
-// actions/gear.ts
-
-// export async function getAllGearsAction(queryParams?: Record<string, string>) {
-//   try {
-//     const params = new URLSearchParams();
-
-//     if (queryParams) {
-//       Object.entries(queryParams).forEach(([key, value]) => {
-//         if (value !== undefined && value !== null && value !== "") {
-//           params.append(key, value);
-//         }
-//       });
-//     }
-
-//     const queryString = params.toString() ? `?${params.toString()}` : "";
-//     console.log(queryString,"String")
-
-//     const res = await fetch(`${process.env.BACKEND_API_URL}/gears${queryString}`, {
-//       method: "GET",
-//       cache: "no-store", // Ensures real-time data on parameter update
-//     });
-
-//     const data = await res.json();
-
-//     if (!res.ok) {
-//       return {
-//         success: false,
-//         message: data.message || "Failed to fetch gears.",
-//         data: [],
-//         meta: { total: 0, page: 1, limit: 10, totalPage: 1 },
-//       };
-//     }
-
-//     return {
-//       success: true,
-//       data: data.data || [],
-//       meta: data.meta || null,
-//     };
-//   } catch (error) {
-//     return {
-//       success: false,
-//       message: "Something went wrong while fetching gears.",
-//       data: [],
-//       meta: { total: 0, page: 1, limit: 10, totalPage: 1 },
-//     };
-//   }
-// }
 /**
  * GET SINGLE GEAR
  */

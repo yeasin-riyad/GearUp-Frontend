@@ -64,6 +64,11 @@ export default async function DashboardLayout({
                   iconName="rentals"
                   label="My Rentals"
                 />
+                <SidebarLink
+                  href="/dashboard/customer/reviews"
+                  iconName="rentals"
+                  label="My Reviews"
+                />
               </>
             )}
 

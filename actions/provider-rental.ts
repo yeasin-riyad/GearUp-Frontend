@@ -12,8 +12,8 @@ export interface ProviderRentalItem {
   subtotal: number;
   gearItem: {
     id: string;
-    title: string;
-    imageUrl?: string;
+    name: string;
+    images: string[];
     category?: {
       name: string;
     };
