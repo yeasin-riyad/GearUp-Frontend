@@ -1,6 +1,6 @@
 // src/components/public/Footer.tsx
 import Link from "next/link";
-import { Dumbbell, Globe, Share2, MessageCircle } from "lucide-react"; // Social Brand Icon-এর জায়গায় Standard Icons
+import { Dumbbell, Globe, Share2, MessageCircle } from "lucide-react";
 
 export function Footer() {
   return (
@@ -10,7 +10,7 @@ export function Footer() {
           
           {/* Brand Info */}
           <div className="space-y-4">
-            <Link href="/" className="flex items-center gap-2">
+            <Link href="#" className="flex items-center gap-2">
               <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary text-primary-foreground">
                 <Dumbbell className="h-4 w-4" />
               </div>
@@ -29,10 +29,10 @@ export function Footer() {
               Explore
             </h4>
             <ul className="space-y-2 text-xs text-muted-foreground">
-              <li><Link href="/gear" className="hover:text-primary transition-colors">All Gear Items</Link></li>
-              <li><Link href="/gear?category=camping" className="hover:text-primary transition-colors">Camping & Hiking</Link></li>
-              <li><Link href="/gear?category=cycling" className="hover:text-primary transition-colors">Cycling & Biking</Link></li>
-              <li><Link href="/gear?category=water-sports" className="hover:text-primary transition-colors">Water Sports</Link></li>
+              <li><Link href="#" className="hover:text-primary transition-colors">All Gear Items</Link></li>
+              <li><Link href="#" className="hover:text-primary transition-colors">Camping & Hiking</Link></li>
+              <li><Link href="#" className="hover:text-primary transition-colors">Cycling & Biking</Link></li>
+              <li><Link href="#" className="hover:text-primary transition-colors">Water Sports</Link></li>
             </ul>
           </div>
 
@@ -42,9 +42,9 @@ export function Footer() {
               Join GearUp
             </h4>
             <ul className="space-y-2 text-xs text-muted-foreground">
-              <li><Link href="/auth/register?role=customer" className="hover:text-primary transition-colors">Rent Equipment</Link></li>
-              <li><Link href="/auth/register?role=provider" className="hover:text-primary transition-colors">Become a Provider</Link></li>
-              <li><Link href="/auth/login" className="hover:text-primary transition-colors">Partner Dashboard</Link></li>
+              <li><Link href="#" className="hover:text-primary transition-colors">Rent Equipment</Link></li>
+              <li><Link href="#" className="hover:text-primary transition-colors">Become a Provider</Link></li>
+              <li><Link href="#" className="hover:text-primary transition-colors">Partner Dashboard</Link></li>
             </ul>
           </div>
 

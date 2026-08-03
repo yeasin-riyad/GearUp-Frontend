@@ -1,12 +1,7 @@
 import { redirect } from "next/navigation";
-import Link from "next/link";
-import {
-  Dumbbell,
-  LogOut
-} from "lucide-react";
 import { getCurrentUser } from "@/service/auth.service";
 import { logout } from "@/service/logout";
-import { SidebarLink } from "@/components/dashboard/sidebar-link"; // Client component import
+import { DashboardSidebar } from "@/components/dashboard/dashboard-sidebar";
 
 export default async function DashboardLayout({
   children,
@@ -29,108 +24,8 @@ export default async function DashboardLayout({
 
   return (
     <div className="flex min-h-screen bg-muted/20">
-      {/* Sidebar Navigation */}
-      <aside className="w-64 border-r border-border/60 bg-background flex flex-col justify-between p-4">
-        <div className="space-y-6">
-          {/* Logo Header */}
-          <Link href="/" className="flex items-center gap-2 px-2">
-            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary text-primary-foreground">
-              <Dumbbell className="h-4 w-4" />
-            </div>
-            <span className="font-bold text-lg">GearUp</span>
-          </Link>
-
-          {/* User Badge */}
-          <div className="rounded-lg bg-muted p-3 text-xs">
-            <p className="font-semibold text-foreground truncate">
-              {user.name}
-            </p>
-            <p className="text-muted-foreground capitalize">
-              {user.role?.toLowerCase()} Account
-            </p>
-          </div>
-
-          {/* Navigation Items based on Role */}
-          <nav className="space-y-1">
-            {user.role === "CUSTOMER" && (
-              <>
-                <SidebarLink
-                  href="/dashboard/customer"
-                  iconName="dashboard"
-                  label="Overview"
-                />
-                <SidebarLink
-                  href="/dashboard/customer/rentals"
-                  iconName="rentals"
-                  label="My Rentals"
-                />
-                <SidebarLink
-                  href="/dashboard/customer/reviews"
-                  iconName="rentals"
-                  label="My Reviews"
-                />
-              </>
-            )}
-
-            {user.role === "PROVIDER" && (
-              <>
-                <SidebarLink
-                  href="/dashboard/provider"
-                  iconName="dashboard"
-                  label="Overview"
-                />
-                <SidebarLink
-                  href="/dashboard/provider/gear/new"
-                  iconName="inventory"
-                  label="My Inventory"
-                />
-                <SidebarLink
-                  href="/dashboard/provider/orders"
-                  iconName="rentals"
-                  label="Rental Requests"
-                />
-            
-              </>
-            )}
-
-            {user.role === "ADMIN" && (
-              <>
-                <SidebarLink
-                  href="/dashboard/admin"
-                  iconName="dashboard"
-                  label="Analytics"
-                />
-                <SidebarLink
-                  href="/dashboard/admin/categories"
-                  iconName="categories"
-                  label="Categories"
-                />
-                <SidebarLink
-                  href="/dashboard/admin/users"
-                  iconName="users"
-                  label="User Management"
-                />
-                <SidebarLink
-                  href="/dashboard/admin/moderation"
-                  iconName="moderation"
-                  label="Gear Moderation"
-                />
-              </>
-            )}
-          </nav>
-        </div>
-
-        {/* Footer Logout Action */}
-        <form action={handleLogout}>
-          <button
-            type="submit"
-            className="flex w-full items-center gap-2 px-3 py-2 text-sm text-muted-foreground hover:text-foreground transition-colors rounded-md hover:bg-muted/50"
-          >
-            <LogOut className="h-4 w-4" />
-            <span>Logout</span>
-          </button>
-        </form>
-      </aside>
+      {/* Client Sidebar Component */}
+      <DashboardSidebar user={user} handleLogout={handleLogout} />
 
       {/* Main Content Area */}
       <main className="flex-1 p-8 overflow-y-auto">{children}</main>

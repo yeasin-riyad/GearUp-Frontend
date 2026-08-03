@@ -42,8 +42,7 @@ export function Navbar({ currentUser = null }: NavbarProps) {
   const publicNavLinks = [
     { name: "Home", href: "/" },
     { name: "Browse Gear", href: "/gears" },
-    { name: "Categories", href: "/gear?view=categories" },
-    { name: "How It Works", href: "/#how-it-works" },
+    { name: "How It Works", href: "/how-it-works" },
   ];
 
   const isActive = (path: string) => {

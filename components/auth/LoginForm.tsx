@@ -90,12 +90,12 @@ export function LoginForm() {
             <label className="text-sm font-medium text-foreground">
               Password *
             </label>
-            <Link
+            {/* <Link
               href="/forgot-password"
               className="text-xs font-medium text-primary hover:underline"
             >
               Forgot?
-            </Link>
+            </Link> */}
           </div>
           <div className="relative">
             <Lock className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
