@@ -40,43 +40,43 @@ import {
   RentalOrder,
 } from "@/actions/rental";
 
-// 🎨 Status UI Configuration according to requirements
+// Status UI Configuration strictly typed against RentalOrder status values
 const STATUS_CONFIG: Record<
-  string,
+  RentalOrder["status"],
   {
     label: string;
     className: string;
     icon: any;
   }
 > = {
-  PLACED: {
-    label: "Placed",
-    className: "bg-amber-100 text-amber-800 border-amber-300 dark:bg-amber-950/50 dark:text-amber-300 dark:border-amber-800",
+  PENDING: {
+    label: "Pending",
+    className:
+      "bg-amber-100 text-amber-800 border-amber-300 dark:bg-amber-950/50 dark:text-amber-300 dark:border-amber-800",
     icon: Clock,
   },
-  CONFIRMED: {
-    label: "Confirmed",
-    className: "bg-blue-100 text-blue-800 border-blue-300 dark:bg-blue-950/50 dark:text-blue-300 dark:border-blue-800",
+  APPROVED: {
+    label: "Approved",
+    className:
+      "bg-blue-100 text-blue-800 border-blue-300 dark:bg-blue-950/50 dark:text-blue-300 dark:border-blue-800",
     icon: CheckCircle2,
   },
-  PAID: {
-    label: "Paid",
-    className: "bg-purple-100 text-purple-800 border-purple-300 dark:bg-purple-950/50 dark:text-purple-300 dark:border-purple-800",
-    icon: DollarSign,
-  },
-  PICKED_UP: {
-    label: "Picked Up",
-    className: "bg-emerald-100 text-emerald-800 border-emerald-300 dark:bg-emerald-950/50 dark:text-emerald-300 dark:border-emerald-800",
+  ACTIVE: {
+    label: "Active",
+    className:
+      "bg-emerald-100 text-emerald-800 border-emerald-300 dark:bg-emerald-950/50 dark:text-emerald-300 dark:border-emerald-800",
     icon: Truck,
   },
-  RETURNED: {
-    label: "Returned",
-    className: "bg-slate-100 text-slate-800 border-slate-300 dark:bg-slate-800 dark:text-slate-300 dark:border-slate-700",
+  COMPLETED: {
+    label: "Completed",
+    className:
+      "bg-slate-100 text-slate-800 border-slate-300 dark:bg-slate-800 dark:text-slate-300 dark:border-slate-700",
     icon: RotateCcw,
   },
   CANCELLED: {
     label: "Cancelled",
-    className: "bg-red-100 text-red-800 border-red-300 dark:bg-red-950/50 dark:text-red-300 dark:border-red-800",
+    className:
+      "bg-red-100 text-red-800 border-red-300 dark:bg-red-950/50 dark:text-red-300 dark:border-red-800",
     icon: XCircle,
   },
 };
@@ -122,8 +122,8 @@ export default function MyRentalsPage() {
         toast.success("Rental order cancelled successfully.");
         setRentals((prev) =>
           prev.map((item) =>
-            item.id === rentalId ? { ...item, status: "CANCELLED" } : item,
-          ),
+            item.id === rentalId ? { ...item, status: "CANCELLED" } : item
+          )
         );
       } else {
         toast.error(res.error || "Failed to cancel order.");
@@ -196,10 +196,9 @@ export default function MyRentalsPage() {
           };
           const StatusIcon = statusConfig.icon;
 
-          // Status Specific Controls
-          const isCancelable = rental.status === "PLACED";
-          const isConfirmed = rental.status === "CONFIRMED";
-          const isReturned = rental.status === "RETURNED";
+          // Status Specific Controls aligned with RentalOrder schema
+          const isCancelable = rental.status === "PENDING";
+          const isCompleted = rental.status === "COMPLETED";
           const isCancellingThis = cancellingId === rental.id;
 
           return (
@@ -268,8 +267,8 @@ export default function MyRentalsPage() {
                         ${item.subtotal.toFixed(2)}
                       </p>
 
-                      {/* ✅ RETURNED Status -> Leave/Add Review Button */}
-                      {isReturned && item.gearItemId && (
+                      {/* COMPLETED Status -> Leave/Add Review Button */}
+                      {isCompleted && item.gearItemId && (
                         <Button
                           size="sm"
                           variant="outline"
@@ -305,21 +304,7 @@ export default function MyRentalsPage() {
                     </p>
                   )}
 
-                  {/* ✅ CONFIRMED Status -> Pay Now Button */}
-                  {/* {isConfirmed && (
-                    <Button
-                      size="sm"
-                      className="h-9 px-4 text-xs font-medium bg-blue-600 hover:bg-blue-700 text-white"
-                      onClick={() =>
-                        router.push(`/dashboard/customer/rentals/${rental.id}/pay`)
-                      }
-                    >
-                      <CreditCard className="mr-1.5 h-3.5 w-3.5" />
-                      <span>Pay Now</span>
-                    </Button>
-                  )} */}
-
-                  {/* ✅ PLACED Status -> Cancel Order Button */}
+                  {/* PENDING Status -> Cancel Order Button */}
                   {isCancelable && (
                     <Button
                       variant="destructive"

@@ -13,7 +13,7 @@ import { buttonVariants } from "@/components/ui/button";
 import { badgeVariants } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 import { getAllGearsAction } from "@/actions/gear.action";
-import { getCategoriesAction } from "@/actions/category.action"; // নিশ্চিত করুন আপনার Category Action এর সঠিক পাথটি এখানে আছে
+import { getCategoriesAction } from "@/actions/category.action";
 import { GearSidebarFilter } from "../gear/_components/gear-sidebar-filter";
 
 interface Category {
@@ -34,6 +34,7 @@ interface GearItem {
   location?: string;
   images?: string[];
   availability: "AVAILABLE" | "UNAVAILABLE";
+  isAvailable?: boolean;
 }
 
 interface PageProps {
@@ -43,24 +44,30 @@ interface PageProps {
 export default async function GearListingPage({ searchParams }: PageProps) {
   const resolvedSearchParams = await searchParams;
 
-  // ব্যাকএন্ডে URLSearchParams এবং ক্যাটাগরি প্যারালালে ফেচ করা হচ্ছে
+  // Filter out undefined keys to match Record<string, string> strictly
+  const queryParams: Record<string, string> = Object.fromEntries(
+    Object.entries(resolvedSearchParams).filter(
+      (entry): entry is [string, string] => entry[1] !== undefined
+    )
+  );
+
+  // Parallel fetching for gear listing and categories
   const [gearsResponse, categoriesResponse] = await Promise.all([
-    getAllGearsAction(resolvedSearchParams),
+    getAllGearsAction(queryParams),
     getCategoriesAction().catch(() => ({ data: [] })),
   ]);
 
   const gears: GearItem[] = gearsResponse?.data || [];
   const meta = gearsResponse?.meta;
   const categories: Category[] = categoriesResponse?.data || [];
-  console.log(gears, "Gears..");
 
-  // ফেচ করা গিয়ার্স ডাটা থেকে ইউনিক ব্র্যান্ড লিস্ট তৈরি করা
+  // Extract unique brands from fetched gears
   const availableBrands = Array.from(
     new Set(
       gears
         .map((item) => item.brand)
-        .filter((brand): brand is string => Boolean(brand)),
-    ),
+        .filter((brand): brand is string => Boolean(brand))
+    )
   );
 
   return (
@@ -105,13 +112,11 @@ export default async function GearListingPage({ searchParams }: PageProps) {
             ) : (
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                 {gears.map((item) => {
-                  // Category String বা Object দুটোই নিরাপদে এক্সট্র্যাক্ট করা
                   const categoryName =
                     typeof item.category === "object"
                       ? item.category?.name
                       : item.category;
 
-                  // imgUrl array থেকে প্রথম ইমেজ বেছে নেয়া
                   const primaryImage =
                     Array.isArray(item.images) && item.images.length > 0
                       ? item.images[0]
@@ -143,7 +148,7 @@ export default async function GearListingPage({ searchParams }: PageProps) {
                           <span
                             className={cn(
                               badgeVariants({ variant: "secondary" }),
-                              "absolute top-3 left-3 text-[11px] font-medium backdrop-blur-md bg-background/80",
+                              "absolute top-3 left-3 text-[11px] font-medium backdrop-blur-md bg-background/80"
                             )}
                           >
                             {categoryName}
@@ -156,7 +161,7 @@ export default async function GearListingPage({ searchParams }: PageProps) {
                             "absolute top-3 right-3 text-[10px] font-medium px-2 py-0.5 rounded-full flex items-center gap-1 backdrop-blur-md",
                             item.isAvailable !== false
                               ? "bg-emerald-500/10 text-emerald-600 border border-emerald-500/20"
-                              : "bg-destructive/10 text-destructive border border-destructive/20",
+                              : "bg-destructive/10 text-destructive border border-destructive/20"
                           )}
                         >
                           {item.isAvailable !== false ? (
@@ -181,9 +186,7 @@ export default async function GearListingPage({ searchParams }: PageProps) {
                             </span>
                             <span className="flex items-center gap-1 font-medium text-foreground">
                               <Star className="h-3.5 w-3.5 fill-amber-400 text-amber-400" />
-
                               {Number(item.averageRating).toFixed(1)}
-
                               <span className="text-muted-foreground">
                                 ({item.reviewCount})
                               </span>
@@ -213,7 +216,7 @@ export default async function GearListingPage({ searchParams }: PageProps) {
                                 variant: "outline",
                                 size: "sm",
                               }),
-                              "h-8 text-xs font-medium",
+                              "h-8 text-xs font-medium"
                             )}
                           >
                             View Details

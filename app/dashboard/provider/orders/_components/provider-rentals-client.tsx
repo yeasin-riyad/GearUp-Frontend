@@ -33,16 +33,6 @@ export type ActionConfig = {
 
 export function getActionConfig(status: string): ActionConfig | null {
   switch (status) {
-    case "PLACED":
-      return {
-        type: "confirm",
-        title: "Confirm Rental Order",
-        description:
-          "Are you sure you want to confirm this order? The customer will be notified to make the payment.",
-        buttonLabel: "Confirm Order",
-        badgeLabel: "Awaiting Confirmation",
-        variant: "default",
-      };
     case "PAID":
       return {
         type: "ready",
@@ -82,13 +72,16 @@ interface ProviderRentalsClientProps {
   initialRentals: ProviderRentalOrder[];
 }
 
-export function ProviderRentalsClient({ initialRentals }: ProviderRentalsClientProps) {
+export function ProviderRentalsClient({
+  initialRentals,
+}: ProviderRentalsClientProps) {
   const [rentals, setRentals] = useState<ProviderRentalOrder[]>(initialRentals);
   const [updatingId, setUpdatingId] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState<string>("ALL");
 
   // Modal State
-  const [selectedRental, setSelectedRental] = useState<ProviderRentalOrder | null>(null);
+  const [selectedRental, setSelectedRental] =
+    useState<ProviderRentalOrder | null>(null);
   const [pendingAction, setPendingAction] = useState<ActionConfig | null>(null);
 
   const triggerActionModal = (rental: ProviderRentalOrder) => {
@@ -103,6 +96,8 @@ export function ProviderRentalsClient({ initialRentals }: ProviderRentalsClientP
     if (!selectedRental || !pendingAction) return;
 
     const rentalId = selectedRental.id;
+    const actionTypeForRequest: "confirm" | "pick-up" | "return" =
+      pendingAction.type === "ready" ? "confirm" : pendingAction.type;
     const actionType = pendingAction.type;
 
     setSelectedRental(null);
@@ -110,7 +105,7 @@ export function ProviderRentalsClient({ initialRentals }: ProviderRentalsClientP
     setUpdatingId(rentalId);
 
     try {
-      const res = await updateRentalStatusAction(rentalId, actionType);
+      const res = await updateRentalStatusAction(rentalId, actionTypeForRequest);
 
       if (res.success) {
         toast.success(res.message);
@@ -147,7 +142,9 @@ export function ProviderRentalsClient({ initialRentals }: ProviderRentalsClientP
   return (
     <div className="container mx-auto max-w-5xl py-12 px-4 space-y-8">
       <div>
-        <h1 className="text-2xl font-bold tracking-tight">Incoming Rental Orders</h1>
+        <h1 className="text-2xl font-bold tracking-tight">
+          Incoming Rental Orders
+        </h1>
         <p className="text-muted-foreground text-sm">
           Manage rental fulfillment, handovers, and equipment returns.
         </p>
@@ -157,20 +154,20 @@ export function ProviderRentalsClient({ initialRentals }: ProviderRentalsClientP
       <Tabs defaultValue="ALL" onValueChange={setActiveTab} className="w-full">
         <TabsList className="grid w-full grid-cols-3 md:grid-cols-6 max-w-3xl">
           <TabsTrigger value="ALL">All ({rentals.length})</TabsTrigger>
-          <TabsTrigger value="PLACED">
-            Placed ({rentals.filter((r) => r.status === "PLACED").length})
+          <TabsTrigger value="PAID">
+            Paid ({rentals.filter((r) => r.status === "PAID").length})
           </TabsTrigger>
           <TabsTrigger value="CONFIRMED">
             Confirmed ({rentals.filter((r) => r.status === "CONFIRMED").length})
-          </TabsTrigger>
-          <TabsTrigger value="PAID">
-            Paid ({rentals.filter((r) => r.status === "PAID").length})
           </TabsTrigger>
           <TabsTrigger value="PICKED_UP">
             Active ({rentals.filter((r) => r.status === "PICKED_UP").length})
           </TabsTrigger>
           <TabsTrigger value="RETURNED">
             Returned ({rentals.filter((r) => r.status === "RETURNED").length})
+          </TabsTrigger>
+          <TabsTrigger value="CANCELLED">
+            Cancelled ({rentals.filter((r) => r.status === "CANCELLED").length})
           </TabsTrigger>
         </TabsList>
       </Tabs>

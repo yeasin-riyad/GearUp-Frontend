@@ -50,8 +50,8 @@ interface GearDetail {
   deposit?: number;
   location?: string;
   brand?: string;
-  stock?: number;
-  availability?: string;
+  stock: number;
+  availability: string;
   rating?: number;
   reviewsCount?: number;
   images?: string[];

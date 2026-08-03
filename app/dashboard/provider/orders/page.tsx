@@ -20,5 +20,5 @@ export default async function ProviderRentalsPage() {
     );
   }
 
-  return <ProviderRentalsClient initialRentals={res.rentals} />;
+  return <ProviderRentalsClient initialRentals={res.rentals ?? []} />;
 }

@@ -172,7 +172,7 @@ export default function AdminUsersPage() {
         <div className="flex flex-wrap items-center gap-3 w-full sm:w-auto">
           <div className="flex items-center gap-2">
             <SlidersHorizontal className="h-4 w-4 text-muted-foreground hidden md:inline" />
-            <Select value={roleFilter} onValueChange={setRoleFilter}>
+            <Select value={roleFilter} onValueChange={(val) => setRoleFilter(val ?? "ALL")}>
               <SelectTrigger className="w-[130px] h-10">
                 <SelectValue placeholder="Role" />
               </SelectTrigger>
@@ -185,7 +185,7 @@ export default function AdminUsersPage() {
             </Select>
           </div>
 
-          <Select value={statusFilter} onValueChange={setStatusFilter}>
+          <Select value={statusFilter} onValueChange={(val) => setStatusFilter(val ?? "ALL")}>
             <SelectTrigger className="w-[140px] h-10">
               <SelectValue placeholder="Status" />
             </SelectTrigger>

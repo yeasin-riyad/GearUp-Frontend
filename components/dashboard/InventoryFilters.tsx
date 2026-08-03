@@ -1,7 +1,7 @@
 "use client";
 
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { useTransition, useEffect, useState } from "react";
+import { useTransition, useEffect, useState, useCallback } from "react";
 import { Input } from "@/components/ui/input";
 import {
   Select,
@@ -23,76 +23,79 @@ export function InventoryFilters({ categories }: { categories: Category[] }) {
   const searchParams = useSearchParams();
   const [isPending, startTransition] = useTransition();
 
-  // ১. সার্চের জন্য Local state (Debounce করার জন্য)
+  // 1. Local state for Search (Debounced)
   const [searchTerm, setSearchTerm] = useState(
     searchParams.get("search")?.toString() || ""
   );
 
+  const handleParamChange = useCallback(
+    (key: string, value: string) => {
+      const params = new URLSearchParams(searchParams.toString());
+
+      if (value && value !== "all") {
+        params.set(key, value);
+      } else {
+        params.delete(key);
+      }
+
+      // Reset to page 1 on filter/search change
+      params.set("page", "1");
+
+      startTransition(() => {
+        router.push(`${pathname}?${params.toString()}`);
+      });
+    },
+    [pathname, router, searchParams]
+  );
+
   useEffect(() => {
     const timer = setTimeout(() => {
-      const currentSearch = searchParams.get("search") || "";
+      const currentSearch = searchParams.get("search") ?? "";
       if (searchTerm !== currentSearch) {
         handleParamChange("search", searchTerm);
       }
     }, 500);
 
     return () => clearTimeout(timer);
-  }, [searchTerm]);
+  }, [searchTerm, searchParams, handleParamChange]);
 
-  // সিঙ্গেল প্যারামিটার আপডেটের মেথড
-  const handleParamChange = (key: string, value: string) => {
-    const params = new URLSearchParams(searchParams.toString());
+  // 2. Frontend driven sortBy and sortOrder handling
+  const handleSortChange = (value: string | null) => {
+  if (!value) return;
 
-    if (value && value !== "all") {
-      params.set(key, value);
-    } else {
-      params.delete(key);
-    }
+  const params = new URLSearchParams(searchParams.toString());
 
-    // ফিল্টার/সার্চ পরিবর্তন হলে সবসময় ১ নম্বর পেজে রিসেট হবে
-    params.set("page", "1");
+  switch (value) {
+    case "price-asc":
+      params.set("sortBy", "pricePerDay");
+      params.set("sortOrder", "asc");
+      break;
 
-    startTransition(() => {
-      router.push(`${pathname}?${params.toString()}`);
-    });
-  };
+    case "price-desc":
+      params.set("sortBy", "pricePerDay");
+      params.set("sortOrder", "desc");
+      break;
 
-  // ৩. ফ্রন্টএন্ড থেকেই sortBy এবং sortOrder হ্যান্ডলিং
-  const handleSortChange = (value: string) => {
-    const params = new URLSearchParams(searchParams.toString());
+    case "name-asc":
+      params.set("sortBy", "name");
+      params.set("sortOrder", "asc");
+      break;
 
-    // ফ্রন্টএন্ডেই ভ্যালু ভেঙে আলাদা করে দেওয়া হচ্ছে
-    switch (value) {
-      case "price-asc":
-        params.set("sortBy", "pricePerDay");
-        params.set("sortOrder", "asc");
-        break;
+    case "newest":
+    default:
+      params.set("sortBy", "createdAt");
+      params.set("sortOrder", "desc");
+      break;
+  }
 
-      case "price-desc":
-        params.set("sortBy", "pricePerDay");
-        params.set("sortOrder", "desc");
-        break;
+  params.set("page", "1");
 
-      case "name-asc":
-        params.set("sortBy", "name");
-        params.set("sortOrder", "asc");
-        break;
+  startTransition(() => {
+    router.push(`${pathname}?${params.toString()}`);
+  });
+};
 
-      case "newest":
-      default:
-        params.set("sortBy", "createdAt");
-        params.set("sortOrder", "desc");
-        break;
-    }
-
-    params.set("page", "1");
-
-    startTransition(() => {
-      router.push(`${pathname}?${params.toString()}`);
-    });
-  };
-
-  // বর্তমানে সিলেক্টেড সর্টিং এর অপশন বের করা
+  // Determine current selected sort option
   const currentSortBy = searchParams.get("sortBy") || "createdAt";
   const currentSortOrder = searchParams.get("sortOrder") || "desc";
 
@@ -124,8 +127,8 @@ export function InventoryFilters({ categories }: { categories: Category[] }) {
       <div className="flex flex-wrap items-center gap-3">
         {/* Category Filter */}
         <Select
-          defaultValue={searchParams.get("category") || "all"}
-          onValueChange={(val) => handleParamChange("category", val)}
+          value={searchParams.get("category") || "all"}
+          onValueChange={(val) => handleParamChange("category", val!)}
         >
           <SelectTrigger className="w-40">
             <SelectValue placeholder="All Categories" />

@@ -86,10 +86,10 @@ export function RentalCard({ rental, isUpdating, onActionTrigger }: RentalCardPr
             className="py-3 flex items-center justify-between gap-4 first:pt-0 last:pb-0"
           >
             <div className="flex items-center gap-3">
-              {item.gearItem?.imageUrl ? (
+              {item.gearItem?.images[0] ? (
                 <Image
-                  src={item.gearItem.imageUrl}
-                  alt={item.gearItem.title}
+                  src={item.gearItem.images[0]}
+                  alt={item.gearItem.name}
                   width={48}
                   height={48}
                   className="h-12 w-12 rounded-lg object-cover border"
@@ -102,7 +102,7 @@ export function RentalCard({ rental, isUpdating, onActionTrigger }: RentalCardPr
 
               <div>
                 <p className="font-medium text-sm">
-                  {item.gearItem?.title || "Gear Item"}
+                  {item.gearItem?.name || "Gear Item"}
                 </p>
                 <p className="text-xs text-muted-foreground">
                   ${item.pricePerDay}/day &times; Qty {item.quantity}
