@@ -63,7 +63,6 @@ export async function getAllGearsAction(queryParams?: Record<string, string>) {
       ? "?" + new URLSearchParams(queryParams).toString()
       : "";
 
-      console.log(queryString,'String...');
     const res = await fetch(`${process.env.BACKEND_API_URL}/gears${queryString}`, {
       method: "GET",
       cache: "no-store", // Ensures fresh data when search/page changes

@@ -14,9 +14,8 @@ import {
   Loader2,
   Star,
   RotateCcw,
-  CreditCard,
   Truck,
-  DollarSign,
+  LucideIcon,
 } from "lucide-react";
 import { toast } from "sonner";
 
@@ -40,13 +39,13 @@ import {
   RentalOrder,
 } from "@/actions/rental";
 
-// Status UI Configuration strictly typed against RentalOrder status values
+// Flexible Status UI Configuration to support RETURNED or any custom status
 const STATUS_CONFIG: Record<
-  RentalOrder["status"],
+  string,
   {
     label: string;
     className: string;
-    icon: any;
+    icon: LucideIcon;
   }
 > = {
   PENDING: {
@@ -70,7 +69,13 @@ const STATUS_CONFIG: Record<
   COMPLETED: {
     label: "Completed",
     className:
-      "bg-slate-100 text-slate-800 border-slate-300 dark:bg-slate-800 dark:text-slate-300 dark:border-slate-700",
+      "bg-emerald-100 text-emerald-800 border-emerald-300 dark:bg-emerald-950/50 dark:text-emerald-300 dark:border-emerald-800",
+    icon: RotateCcw,
+  },
+  RETURNED: {
+    label: "Returned",
+    className:
+      "bg-purple-100 text-purple-800 border-purple-300 dark:bg-purple-950/50 dark:text-purple-300 dark:border-purple-800",
     icon: RotateCcw,
   },
   CANCELLED: {
@@ -153,7 +158,7 @@ export default function MyRentalsPage() {
     );
   }
 
-  if (rentals.length === 0) {
+  if (rentals?.length === 0) {
     return (
       <div className="container mx-auto max-w-lg py-20 px-4 text-center space-y-6">
         <div className="flex justify-center">
@@ -170,7 +175,10 @@ export default function MyRentalsPage() {
             collection to start renting.
           </p>
         </div>
-        <Button className="h-12 px-6 text-sm font-medium" onClick={() => router.push("/gears")}>
+        <Button
+          className="h-12 px-6 text-sm font-medium"
+          onClick={() => router.push("/gears")}
+        >
           <ShoppingBag className="mr-2 h-4 w-4" />
           <span>Browse Available Gear</span>
         </Button>
@@ -196,9 +204,12 @@ export default function MyRentalsPage() {
           };
           const StatusIcon = statusConfig.icon;
 
-          // Status Specific Controls aligned with RentalOrder schema
+          // Status Specific Controls
           const isCancelable = rental.status === "PENDING";
-          const isCompleted = rental.status === "COMPLETED";
+          // COMPLETED or RETURNED status triggers review
+          const canReview =
+            (rental.status as string) === "COMPLETED" ||
+            (rental.status as string) === "RETURNED";
           const isCancellingThis = cancellingId === rental.id;
 
           return (
@@ -232,60 +243,64 @@ export default function MyRentalsPage() {
 
               {/* Items List */}
               <div className="divide-y">
-                {rental.items?.map((item) => (
-                  <div
-                    key={item.id}
-                    className="py-3 flex flex-wrap items-center justify-between gap-4 first:pt-0 last:pb-0"
-                  >
-                    <div className="flex items-center gap-3">
-                      {item.gearItem?.imageUrl ? (
-                        <Image
-                          alt={item.gearItem.title}
-                          src={item.gearItem.imageUrl}
-                          width={48}
-                          height={48}
-                          className="h-12 w-12 rounded-lg object-cover border"
-                        />
-                      ) : (
-                        <div className="h-12 w-12 rounded-lg bg-muted flex items-center justify-center">
-                          <Package className="h-5 w-5 text-muted-foreground" />
-                        </div>
-                      )}
+                {rental.items?.map((item: any) => {
+                  const gearId = item.gearItem?.id || item.gearItemId || item.id;
 
-                      <div>
-                        <p className="font-medium text-sm">
-                          {item.gearItem?.title || "Gear Item"}
+                  return (
+                    <div
+                      key={item.id}
+                      className="py-3 flex flex-wrap items-center justify-between gap-4 first:pt-0 last:pb-0"
+                    >
+                      <div className="flex items-center gap-3">
+                        {item.gearItem?.imageUrl ? (
+                          <Image
+                            alt={item.gearItem.title || "Gear"}
+                            src={item.gearItem.imageUrl}
+                            width={48}
+                            height={48}
+                            className="h-12 w-12 rounded-lg object-cover border"
+                          />
+                        ) : (
+                          <div className="h-12 w-12 rounded-lg bg-muted flex items-center justify-center">
+                            <Package className="h-5 w-5 text-muted-foreground" />
+                          </div>
+                        )}
+
+                        <div>
+                          <p className="font-medium text-sm">
+                            {item.gearItem?.title || "Gear Item"}
+                          </p>
+                          <p className="text-xs text-muted-foreground">
+                            ${item.pricePerDay}/day &times; Qty {item.quantity}
+                          </p>
+                        </div>
+                      </div>
+
+                      <div className="flex items-center gap-4">
+                        <p className="font-semibold text-sm">
+                          ${item.subtotal?.toFixed(2) || "0.00"}
                         </p>
-                        <p className="text-xs text-muted-foreground">
-                          ${item.pricePerDay}/day &times; Qty {item.quantity}
-                        </p>
+
+                        {/* COMPLETED or RETURNED Status -> Leave Review Button */}
+                        {canReview && (
+                          <Button
+                            size="sm"
+                            variant="outline"
+                            className="h-8 px-3 text-xs gap-1.5 border-amber-500/50 hover:bg-amber-50 dark:hover:bg-amber-950/30 text-amber-600 dark:text-amber-400"
+                            onClick={() =>
+                              router.push(
+                                `/dashboard/customer/rentals/${rental.id}/review?gearItemId=${gearId}`
+                              )
+                            }
+                          >
+                            <Star className="h-3.5 w-3.5 fill-amber-400 text-amber-400" />
+                            <span>Leave Review</span>
+                          </Button>
+                        )}
                       </div>
                     </div>
-
-                    <div className="flex items-center gap-4">
-                      <p className="font-semibold text-sm">
-                        ${item.subtotal.toFixed(2)}
-                      </p>
-
-                      {/* COMPLETED Status -> Leave/Add Review Button */}
-                      {isCompleted && item.gearItemId && (
-                        <Button
-                          size="sm"
-                          variant="outline"
-                          className="h-8 px-3 text-xs gap-1.5 border-amber-500/50 hover:bg-amber-50 dark:hover:bg-amber-950/30 text-amber-600 dark:text-amber-400"
-                          onClick={() =>
-                            router.push(
-                              `rentals/${rental.id}/review?gearItemId=${item.gearItemId}`
-                            )
-                          }
-                        >
-                          <Star className="h-3.5 w-3.5 fill-amber-400 text-amber-400" />
-                          <span>Leave Review</span>
-                        </Button>
-                      )}
-                    </div>
-                  </div>
-                ))}
+                  );
+                })}
               </div>
 
               {/* Order Footer */}

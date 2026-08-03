@@ -63,6 +63,7 @@ export async function getMyRentalsAction() {
       ? data
       : data.data || [];
 
+
     return {
       success: true,
       rentals,

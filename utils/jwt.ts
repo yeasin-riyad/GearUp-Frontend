@@ -10,7 +10,6 @@ const verifyToken = (token: string, secret: string) => {
         };
     } catch (error: unknown) {
         const message = error instanceof Error ? error.message : String(error);
-        console.log("Token verification failed:", message);
         return {
             success: false,
             error: message
