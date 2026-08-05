@@ -1,489 +1,409 @@
-```markdown
-<div align="center">
-
-# 🚀 GearUp
-### Equipment Rental Marketplace Platform
+# 🏋️ GearUp Frontend
 
 <p align="center">
-  <strong>Rent. Share. Explore.</strong><br/>
-  A modern full-stack equipment rental marketplace built with Next.js, Express.js, Prisma, PostgreSQL, and Stripe.
+  <img src="./public/preview.png" alt="GearUp Banner" width="100%" />
+</p>
+
+<p align="center">
+  <strong>Rent Sports & Outdoor Gear Instantly</strong>
 </p>
 
 <p align="center">
 
-![Next.js](https://img.shields.io/badge/Next.js-15-black?style=for-the-badge&logo=next.js)
-![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?style=for-the-badge&logo=typescript)
-![Node.js](https://img.shields.io/badge/Node.js-339933?style=for-the-badge&logo=node.js)
-![Express](https://img.shields.io/badge/Express.js-000000?style=for-the-badge&logo=express)
-![Prisma](https://img.shields.io/badge/Prisma-2D3748?style=for-the-badge&logo=prisma)
-![PostgreSQL](https://img.shields.io/badge/PostgreSQL-336791?style=for-the-badge&logo=postgresql)
-![Stripe](https://img.shields.io/badge/Stripe-635BFF?style=for-the-badge&logo=stripe)
-![TailwindCSS](https://img.shields.io/badge/TailwindCSS-38BDF8?style=for-the-badge&logo=tailwind-css)
+![Next.js](https://img.shields.io/badge/Next.js-16-black?style=for-the-badge\&logo=next.js)
+![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?style=for-the-badge\&logo=typescript\&logoColor=white)
+![React](https://img.shields.io/badge/React-61DAFB?style=for-the-badge\&logo=react\&logoColor=black)
+![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-38BDF8?style=for-the-badge\&logo=tailwind-css\&logoColor=white)
+![shadcn/ui](https://img.shields.io/badge/shadcn/ui-black?style=for-the-badge)
 
 </p>
 
 ---
 
-## 📖 About
+# 📖 Overview
 
-**GearUp** is a modern **Equipment Rental Marketplace** where people can rent cameras, camping gear, photography equipment, drones, audio devices, and many other items.
+**GearUp** is a modern, responsive sports and outdoor equipment rental platform built with **Next.js 16**. Customers can browse rental gear, choose rental dates, complete secure payments, and track their orders. Providers manage inventory and rental requests, while administrators oversee the entire platform through dedicated dashboards.
 
-The platform connects **Customers** with **Providers**, while **Administrators** manage the entire marketplace.
-
-It provides secure authentication, online payments, booking management, inventory management, reviews, analytics, and moderation.
+The frontend communicates with a backend REST API and focuses on delivering a fast, intuitive, and responsive user experience.
 
 ---
 
 # ✨ Features
 
-## 👤 Customer
+## 🌍 Public Features
 
-- Browse rental equipment
-- Advanced Search & Filtering
-- Category browsing
-- Booking System
-- Stripe Checkout
-- Rental History
-- Leave Reviews
-- Update Profile
-- Payment History
-
----
-
-## 📦 Provider
-
-- Dashboard
-- Add New Equipment
-- Update Equipment
-- Delete Equipment
-- Inventory Management
-- Incoming Rental Requests
-- Confirm Rentals
-- Mark Picked Up
-- Complete Rentals
-- Earnings Overview
+* Responsive Home Page
+* Featured Gear Showcase
+* Gear Listing Grid
+* Advanced Search
+* Category Filtering
+* Brand Filtering
+* Price Range Filtering
+* Availability Date Filtering
+* Optimized Images with `next/image`
+* Gear Details Page
+* Image Gallery
+* Provider Information
+* Rent Now Section
+* Loading Skeletons
+* Custom Error Pages
+* Responsive Design
 
 ---
 
-## 👑 Admin
+## 🔐 Authentication
 
-- Dashboard Analytics
-- User Management
-- Suspend / Activate Users
-- Category Management
-- View All Gear
-- Content Moderation
-- View All Rental Orders
-- Platform Statistics
-- Manage Providers
-- Manage Customers
+* User Registration
+* Email & Password Login
+* Role Selection During Registration
+* Protected Routes
+* Next.js Middleware
+* Role-Based Navigation
+* Session Management
+* Form Validation
 
 ---
 
-# 🛠 Tech Stack
+## 👤 Customer Features
 
-## Frontend
-
-- Next.js 16
-- React
-- TypeScript
-- Tailwind CSS
-- Shadcn UI
-- React Hook Form
-- Zod
-- Sonner
-- Lucide Icons
-
----
-
-## Backend
-
-- Node.js
-- Express.js
-- TypeScript
-- Prisma ORM
-- PostgreSQL
-- JWT Authentication
-- Bcrypt
-- Multer
-- Cloudinary
-- Stripe
+* Browse Available Gear
+* Rent Equipment
+* Interactive Date Pickers
+* Checkout Flow
+* Stripe / SSLCommerz Payment Integration
+* Payment Success & Cancel Pages
+* Order History
+* Payment History
+* Order Status Tracking
+* Review Submission
 
 ---
 
-## Database
+## 🏪 Provider Features
 
-- PostgreSQL
-- Prisma ORM
-
----
-
-# 🔐 Authentication
-
-- Register
-- Login
-- JWT Access Token
-- Refresh Token
-- Role Based Authorization
-- Protected Routes
-
-Roles
-
-- Customer
-- Provider
-- Admin
+* Provider Dashboard
+* Dashboard Statistics
+* Add New Gear
+* Edit Gear
+* Delete Gear
+* Inventory Management
+* Stock & Availability Control
+* Order Management
+* Update Rental Status
+* Image Upload UI
 
 ---
 
-# 📦 Core Modules
+## 👨‍💼 Admin Features
 
-## Equipment
-
-- Create Gear
-- Update Gear
-- Delete Gear
-- Upload Multiple Images
-- Categories
-- Brands
-- Availability
-- Inventory
+* Admin Dashboard
+* Platform Statistics
+* User Management
+* Suspend / Activate Users
+* Gear Moderation
+* Rental Monitoring
+* Search & Pagination
+* Content Management
 
 ---
 
-## Rental
+# 🚀 Tech Stack
 
-- Place Rental Order
-- Stripe Payment
-- Confirm Order
-- Pick Up
-- Complete Rental
-- Rental History
-
----
-
-## Review
-
-- One Review Per Rental Item
-- Star Rating
-- Comments
-- Average Rating
-- Review Count
+| Technology       | Description              |
+| ---------------- | ------------------------ |
+| Framework        | Next.js 16               |
+| Language         | TypeScript               |
+| Styling          | Tailwind CSS             |
+| UI Library       | shadcn/ui                |
+| Routing          | App Router               |
+| Authentication   | JWT / Better Auth        |
+| Forms            | React Hook Form + Zod    |
+| HTTP Client      | Axios                    |
+| State Management | Zustand                  |
+| Notifications    | Sonner / React Hot Toast |
 
 ---
 
-## Payment
+# 📂 Project Structure
 
-- Stripe Checkout
-- Payment Verification
-- Payment Status
-- Payment History
-
----
-
-# 🔎 Search & Filtering
-
-Supports
-
-- Search
-- Category Filter
-- Brand Filter
-- Availability
-- Price Range
-- Pagination
-- Sorting
-
----
-
-# 📊 Dashboard
-
-### Customer Dashboard
-
-- My Rentals
-- My Payments
-- Leave Reviews
-- Profile
-
----
-
-### Provider Dashboard
-
-- Inventory
-- Incoming Rentals
-- Earnings
-- Reviews
-
----
-
-### Admin Dashboard
-
-- Analytics
-- Users
-- Rentals
-- Categories
-- Gear Listings
-
----
-
-# 📁 Folder Structure
-
-```
-
-gearup
+```bash
+.
+├── app/
+│   ├── (public)/
+│   ├── auth/
+│   ├── dashboard/
+│   │   ├── admin/
+│   │   ├── provider/
+│   │   └── customer/
+│   ├── payment/
+│   └── gear/
 │
-├── client
-│   ├── app
-│   ├── components
-│   ├── actions
-│   ├── hooks
-│   ├── lib
-│   └── providers
-│
-├── server
-│   ├── modules
-│   ├── middleware
-│   ├── routes
-│   ├── prisma
-│   ├── utils
-│   └── config
-│
-└── README.md
-
-````
-
----
-
-# ⚙️ Environment Variables
-
-Backend
-
-```env
-DATABASE_URL=
-
-JWT_ACCESS_SECRET=
-JWT_REFRESH_SECRET=
-
-STRIPE_SECRET_KEY=
-STRIPE_WEBHOOK_SECRET=
-
-CLOUDINARY_CLOUD_NAME=
-CLOUDINARY_API_KEY=
-CLOUDINARY_API_SECRET=
-````
-
-Frontend
-
-```env
-NEXT_PUBLIC_API_URL=
-NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=
+├── components/
+├── hooks/
+├── lib/
+├── services/
+├── store/
+├── providers/
+├── types/
+├── utils/
+├── public/
+└── middleware.ts
 ```
 
 ---
 
-# 🚀 Installation
+# 🛣️ Application Routes
 
-Clone Repository
+| Route                 | Description        |
+| --------------------- | ------------------ |
+| `/`                   | Home Page          |
+| `/gear`               | Browse Gear        |
+| `/gear/[id]`          | Gear Details       |
+| `/auth/register`      | Register           |
+| `/auth/login`         | Login              |
+| `/dashboard/customer` | Customer Dashboard |
+| `/dashboard/provider` | Provider Dashboard |
+| `/dashboard/admin`    | Admin Dashboard    |
+| `/payment/success`    | Payment Success    |
+| `/payment/cancel`     | Payment Cancel     |
+
+---
+
+# 🔄 Customer Journey
+
+```text
+Register/Login
+      │
+      ▼
+Browse Gear
+      │
+      ▼
+View Gear Details
+      │
+      ▼
+Select Rental Dates
+      │
+      ▼
+Checkout
+      │
+      ▼
+Stripe / SSLCommerz
+      │
+      ▼
+Payment Success
+      │
+      ▼
+Track Order
+      │
+      ▼
+Leave Review
+```
+
+---
+
+# 🏪 Provider Journey
+
+```text
+Login
+   │
+   ▼
+Dashboard
+   │
+   ▼
+Manage Inventory
+   │
+   ▼
+Receive Orders
+   │
+   ▼
+Confirm Rental
+   │
+   ▼
+Mark Picked Up
+   │
+   ▼
+Mark Returned
+```
+
+---
+
+# 📊 Rental Status
+
+| Status    | Badge     |
+| --------- | --------- |
+| PLACED    | 🟡 Yellow |
+| CONFIRMED | 🔵 Blue   |
+| PAID      | 🟣 Purple |
+| PICKED_UP | 🟢 Green  |
+| RETURNED  | ⚪ Gray    |
+| CANCELLED | 🔴 Red    |
+
+---
+
+# 🚀 Getting Started
+
+## Clone Repository
 
 ```bash
 git clone https://github.com/yeasin-riyad/GearUp-Frontend.git
+
+cd gearup-frontend
 ```
 
-Backend
+---
+
+## Install Dependencies
 
 ```bash
-cd server
-
 npm install
+```
 
-npx prisma migrate dev
+---
 
+## Configure Environment Variables
+
+Create a `.env.local` file.
+
+```env
+NEXT_PUBLIC_API_URL=http://localhost:5000/api
+
+NEXT_PUBLIC_STRIPE_PUBLIC_KEY=
+
+NEXT_PUBLIC_SSLCOMMERZ_STORE_ID=
+```
+
+---
+
+## Start Development Server
+
+```bash
 npm run dev
 ```
 
-Frontend
+Open:
+
+```text
+http://localhost:3000
+```
+
+---
+
+# 📦 Scripts
 
 ```bash
-cd client
-
-npm install
-
 npm run dev
+
+npm run build
+
+npm run start
+
+npm run lint
 ```
 
 ---
 
-# 📡 REST API
+# 📸 Screenshots
 
-Authentication
+### 🏠 Home Page
 
-```
-POST /auth/register
-
-POST /auth/login
-
-POST /auth/logout
-
-POST /auth/refresh-token
-```
-
-Equipment
-
-```
-GET /gear
-
-GET /gear/:id
-
-POST /gear
-
-PATCH /gear/:id
-
-DELETE /gear/:id
-```
-
-Rentals
-
-```
-GET /rentals
-
-POST /rentals
-
-PATCH /rentals/:id/confirm
-
-PATCH /rentals/:id/pick-up
-
-PATCH /rentals/:id/complete
-```
-
-Reviews
-
-```
-POST /reviews
-
-GET /reviews
-
-PATCH /reviews/:id
-
-DELETE /reviews/:id
-```
-
-Admin
-
-```
-GET /admin/users
-
-PATCH /admin/users/:id/status
-
-GET /admin/rentals
-
-GET /admin/gears
-```
+![Home](./screenshots/home.png)
 
 ---
 
-# 💳 Stripe Payment Flow
+### 🏋️ Gear Listing
 
-Customer
-
-↓
-
-Checkout
-
-↓
-
-Stripe
-
-↓
-
-Webhook
-
-↓
-
-Payment Success
-
-↓
-
-Rental Confirmed
+![Gear Listing](./screenshots/gear-list.png)
 
 ---
 
-# 🌍 Deployment
+### 📄 Gear Details
 
-Frontend
+![Gear Details](./screenshots/gear-details.png)
+![Gear Details](./screenshots/gear-details1.png)
 
-* Vercel
-
-Backend
-
-* Render
-
-Database
-
-* PostgreSQL
-
-Image Storage
-
-* Cloudinary
-
-Payments
-
-* Stripe
 
 ---
 
-# 🎯 Future Improvements
+### 🛒 Checkout
+
+![Checkout](./screenshots/checkout.png)
+
+---
+
+### 👤 Customer Dashboard
+
+![Customer Dashboard](./screenshots/customer-dashboard.png)
+
+---
+
+### 🏪 Provider Dashboard
+
+![Provider Dashboard](./screenshots/provider-dashboard.png)
+
+---
+
+### 👨‍💼 Admin Dashboard
+
+![Admin Dashboard](./screenshots/admin-dashboard.png)
+
+---
+
+# 🎯 Learning Objectives
+
+* Next.js 16 App Router
+* Role-Based Authentication
+* Protected Routes
+* REST API Integration
+* Dynamic Routing
+* Server Components
+* Client Components
+* Middleware
+* Responsive UI Design
+* Modern Dashboard Architecture
+* Form Validation
+* State Management
+* Payment Integration
+* Production Folder Structure
+
+---
+
+# 🚀 Future Improvements
 
 * Wishlist
+* Coupon System
 * Notifications
-* Email Verification
-* Chat System
-* Coupons
-* GPS Pickup
-* AI Recommendations
+* Chat Between Customer & Provider
+* Google Authentication
+* Image Upload with Cloudinary
 * Multi-language Support
-* Progressive Web App
+* Dark Mode
+* Analytics Dashboard
+* Email Notifications
+* Push Notifications
+* PWA Support
 
 ---
 
 # 🤝 Contributing
 
-Contributions are welcome.
+Contributions are welcome!
 
-1. Fork the repository
-
-2. Create a new branch
-
-3. Commit your changes
-
-4. Push the branch
-
-5. Open a Pull Request
+Feel free to fork the repository, submit pull requests, or open issues.
 
 ---
 
+# 📄 License
+
+This project is licensed under the **MIT License**.
 
 ---
 
-# 👨‍💻 Author
+# ⭐ Support
 
-**Md. Yeasin Mazumder**
-
-Backend Developer
-
-LinkedIn:
-https://www.linkedin.com/in/mdyeasinmazumder
-
-Portfolio:
-https://riyad-dev-i3aj.vercel.app/
-
-Email:
-[mazumderyeasin98@gmail.com](mailto:mazumderyeasin98@gmail.com)
+If you found this project helpful, consider giving it a ⭐ on GitHub!
 
 ---
 
-<div align="center">
-
-### ⭐ If you like this project, don't forget to star the repository!
-
-Made with ❤️ using Next.js, Express.js & Prisma.
-
-</div>
-```
+<p align="center">
+Built with ❤️ using Next.js 16, TypeScript, Tailwind CSS, shadcn/ui, and modern frontend best practices.
+</p>
