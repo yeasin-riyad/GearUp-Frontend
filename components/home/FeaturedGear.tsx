@@ -25,7 +25,7 @@ interface GearItem {
 
 export async function FeaturedGear() {
   const res = await getAllGearsAction({
-    limit: "4",
+    limit: "8",
     sortBy: "createdAt",
     sortOrder: "desc",
   });
